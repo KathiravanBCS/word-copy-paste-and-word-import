@@ -1,0 +1,122 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "decimal",
+          "startAt": 5,
+          "textIndentPx": -24
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Fifth",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Fifth"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 5,
+        "marker": {
+          "type": "number",
+          "text": "5.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Sixth",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Sixth"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "6.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Seventh",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Seventh"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "7.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    }
+  ]
+}

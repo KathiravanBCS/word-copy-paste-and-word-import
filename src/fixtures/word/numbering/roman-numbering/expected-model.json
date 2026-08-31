@@ -1,0 +1,108 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "startAt": 1,
+          "textIndentPx": -24,
+          "marginLeftPx": 48
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Introduction",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Introduction"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "I.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Method",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Method"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "II.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Results",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Results"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "III.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

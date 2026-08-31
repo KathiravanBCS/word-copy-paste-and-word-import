@@ -1,0 +1,210 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "•",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Symbol",
+          "textIndentPx": -24
+        }
+      ]
+    },
+    {
+      "listId": "l1",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "decimal",
+          "startAt": 1,
+          "textIndentPx": -24
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "table",
+      "depth": 0,
+      "gridColumnCount": 2,
+      "columns": [
+        {
+          "widthPx": 250,
+          "widthPercent": 50
+        },
+        {
+          "widthPx": 250,
+          "widthPercent": 50
+        }
+      ],
+      "rows": [
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Bullet in a cell",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Bullet in a cell"
+                    }
+                  ],
+                  "styleName": "List Paragraph",
+                  "marginLeftPx": 48,
+                  "textIndentPx": -24,
+                  "listItem": {
+                    "listId": "l0",
+                    "level": 0,
+                    "lfo": "lfo1",
+                    "instance": "list-1-l0-lfo1",
+                    "marker": {
+                      "type": "bullet",
+                      "text": "·",
+                      "glyph": "•",
+                      "rawGlyph": "",
+                      "font": "Symbol",
+                      "numberFormat": "bullet",
+                      "levelText": "",
+                      "source": "mso-list-ignore"
+                    }
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "text": "Second bullet",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Second bullet"
+                    }
+                  ],
+                  "styleName": "List Paragraph",
+                  "marginLeftPx": 48,
+                  "textIndentPx": -24,
+                  "listItem": {
+                    "listId": "l0",
+                    "level": 0,
+                    "lfo": "lfo1",
+                    "instance": "list-1-l0-lfo1",
+                    "marker": {
+                      "type": "bullet",
+                      "text": "·",
+                      "glyph": "•",
+                      "rawGlyph": "",
+                      "font": "Symbol",
+                      "numberFormat": "bullet",
+                      "levelText": "",
+                      "source": "mso-list-ignore"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Numbered in a cell",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Numbered in a cell"
+                    }
+                  ],
+                  "styleName": "List Paragraph",
+                  "marginLeftPx": 48,
+                  "textIndentPx": -24,
+                  "listItem": {
+                    "listId": "l1",
+                    "level": 0,
+                    "lfo": "lfo2",
+                    "instance": "list-2-l1-lfo2",
+                    "restart": true,
+                    "startAt": 1,
+                    "marker": {
+                      "type": "number",
+                      "text": "1.",
+                      "numberFormat": "decimal",
+                      "source": "mso-list-ignore"
+                    }
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "text": "Second numbered",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Second numbered"
+                    }
+                  ],
+                  "styleName": "List Paragraph",
+                  "marginLeftPx": 48,
+                  "textIndentPx": -24,
+                  "listItem": {
+                    "listId": "l1",
+                    "level": 0,
+                    "lfo": "lfo2",
+                    "instance": "list-2-l1-lfo2",
+                    "marker": {
+                      "type": "number",
+                      "text": "2.",
+                      "numberFormat": "decimal",
+                      "source": "mso-list-ignore"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 2
+    }
+  ]
+}

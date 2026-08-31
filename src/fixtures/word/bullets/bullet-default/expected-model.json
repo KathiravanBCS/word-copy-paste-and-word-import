@@ -1,0 +1,159 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "•",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Symbol",
+          "textIndentPx": -24
+        },
+        {
+          "level": 1,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "o",
+          "bulletGlyph": "o",
+          "bulletFont": "Courier New",
+          "textIndentPx": -24
+        },
+        {
+          "level": 2,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "▪",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Wingdings",
+          "textIndentPx": -24
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Parent",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Parent"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "·",
+          "glyph": "•",
+          "rawGlyph": "",
+          "font": "Symbol",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Child",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Child"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 96,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "o",
+          "glyph": "o",
+          "font": "Courier New",
+          "numberFormat": "bullet",
+          "levelText": "o",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Grandchild",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Grandchild"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 144,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 2,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "§",
+          "glyph": "▪",
+          "rawGlyph": "",
+          "font": "Wingdings",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    }
+  ]
+}

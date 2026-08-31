@@ -1,0 +1,71 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "The quick brown fox jumps over the lazy dog.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "The quick brown fox jumps over the lazy dog."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "",
+      "runs": [],
+      "styleName": "Normal",
+      "empty": true,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "A second paragraph, after a deliberately blank one.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A second paragraph, after a deliberately blank one."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "A centred paragraph.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A centred paragraph."
+        }
+      ],
+      "styleName": "Normal",
+      "alignment": "center",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "An indented paragraph with a first-line indent.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "An indented paragraph with a first-line indent."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 48,
+      "textIndentPx": 24
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

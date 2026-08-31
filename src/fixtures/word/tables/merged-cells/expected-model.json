@@ -1,0 +1,144 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "table",
+      "depth": 0,
+      "gridColumnCount": 3,
+      "columns": [
+        {
+          "widthPx": 133.3333,
+          "widthPercent": 33.333
+        },
+        {
+          "widthPx": 133.3333,
+          "widthPercent": 33.333
+        },
+        {
+          "widthPx": 133.3333,
+          "widthPercent": 33.333
+        }
+      ],
+      "rows": [
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 3,
+              "rowSpan": 1,
+              "backgroundColor": "#e2efd9",
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Quarterly summary",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Quarterly summary",
+                      "formatting": {
+                        "bold": true
+                      }
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "alignment": "center",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 2,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Spans two rows",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Spans two rows"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "B1",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "B1"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "C1",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "C1"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 2,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Spans two columns",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Spans two columns"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

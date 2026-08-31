@@ -1,0 +1,210 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "decimal",
+          "startAt": 1,
+          "textIndentPx": -24
+        }
+      ]
+    },
+    {
+      "listId": "l1",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "decimal",
+          "startAt": 1,
+          "textIndentPx": -24
+        }
+      ]
+    },
+    {
+      "listId": "l2",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "decimal",
+          "startAt": 5,
+          "textIndentPx": -24
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "A",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "1.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "B",
+      "runs": [
+        {
+          "type": "text",
+          "text": "B"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "2.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "C",
+      "runs": [
+        {
+          "type": "text",
+          "text": "C"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "3.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "An interrupting paragraph.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "An interrupting paragraph."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "D",
+      "runs": [
+        {
+          "type": "text",
+          "text": "D"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l1",
+        "level": 0,
+        "lfo": "lfo2",
+        "instance": "list-2-l1-lfo2",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "1.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "E",
+      "runs": [
+        {
+          "type": "text",
+          "text": "E"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l1",
+        "level": 0,
+        "lfo": "lfo2",
+        "instance": "list-2-l1-lfo2",
+        "marker": {
+          "type": "number",
+          "text": "2.",
+          "numberFormat": "decimal",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 2
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 2
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    }
+  ]
+}

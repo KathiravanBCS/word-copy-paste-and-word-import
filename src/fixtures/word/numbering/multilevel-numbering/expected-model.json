@@ -1,0 +1,259 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "startAt": 1,
+          "textIndentPx": -48,
+          "marginLeftPx": 48
+        },
+        {
+          "level": 1,
+          "type": "number",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "startAt": 1,
+          "textIndentPx": -48,
+          "marginLeftPx": 72
+        },
+        {
+          "level": 2,
+          "type": "number",
+          "numberFormat": "lower-alpha",
+          "levelText": "%3.",
+          "startAt": 1,
+          "textIndentPx": -24,
+          "marginLeftPx": 120
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Background",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Background"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "I.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Orbis India",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Orbis India"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "1.1",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "We understand",
+      "runs": [
+        {
+          "type": "text",
+          "text": "We understand"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "1.2",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "VSTN",
+      "runs": [
+        {
+          "type": "text",
+          "text": "VSTN"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "1.3",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Given",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Given"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "1.4",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "A sub-point",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A sub-point"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 120,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 2,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "a.",
+          "numberFormat": "lower-alpha",
+          "levelText": "%3.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Scope",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Scope"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "II.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "startAt": 1,
+          "textIndentPx": -48,
+          "marginLeftPx": 48
+        },
+        {
+          "level": 1,
+          "type": "number",
+          "numberFormat": "decimal",
+          "levelText": "%2.",
+          "startAt": 1,
+          "textIndentPx": -24,
+          "marginLeftPx": 96
+        },
+        {
+          "level": 2,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "•",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Symbol",
+          "textIndentPx": -24,
+          "marginLeftPx": 144
+        },
+        {
+          "level": 3,
+          "type": "number",
+          "numberFormat": "lower-alpha",
+          "levelText": "%4.",
+          "startAt": 1,
+          "textIndentPx": -24,
+          "marginLeftPx": 192
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Parent",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Parent"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "I.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Child",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Child"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 96,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "1.",
+          "numberFormat": "decimal",
+          "levelText": "%2.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Grandchild",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Grandchild"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 144,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 2,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "·",
+          "glyph": "•",
+          "rawGlyph": "",
+          "font": "Symbol",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Great-grandchild",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Great-grandchild"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 192,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 3,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "a.",
+          "numberFormat": "lower-alpha",
+          "levelText": "%4.",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    }
+  ]
+}

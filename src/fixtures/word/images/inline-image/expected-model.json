@@ -1,0 +1,59 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Text before the picture.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Text before the picture."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "￼",
+      "runs": [
+        {
+          "type": "image",
+          "imageId": "img-1"
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Text after the picture.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Text after the picture."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [
+    {
+      "id": "img-1",
+      "resolution": "resolved",
+      "origin": "data-uri",
+      "originalSource": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+      "widthPx": 192,
+      "heightPx": 108,
+      "hasSource": true
+    }
+  ],
+  "hyperlinks": [],
+  "diagnostics": []
+}

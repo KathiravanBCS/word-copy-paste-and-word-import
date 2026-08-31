@@ -1,0 +1,142 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "table",
+      "depth": 0,
+      "gridColumnCount": 2,
+      "columns": [
+        {
+          "widthPx": 300,
+          "widthPercent": 60
+        },
+        {
+          "widthPx": 200,
+          "widthPercent": 40
+        }
+      ],
+      "rows": [
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Outer cell, before the nested table.",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Outer cell, before the nested table."
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                },
+                {
+                  "type": "table",
+                  "depth": 1,
+                  "gridColumnCount": 2,
+                  "columns": [
+                    {},
+                    {}
+                  ],
+                  "rows": [
+                    {
+                      "section": "body",
+                      "cells": [
+                        {
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "blocks": [
+                            {
+                              "type": "paragraph",
+                              "text": "Inner A",
+                              "runs": [
+                                {
+                                  "type": "text",
+                                  "text": "Inner A"
+                                }
+                              ],
+                              "styleName": "Normal",
+                              "marginLeftPx": 0
+                            }
+                          ]
+                        },
+                        {
+                          "colSpan": 1,
+                          "rowSpan": 1,
+                          "blocks": [
+                            {
+                              "type": "paragraph",
+                              "text": "Inner B",
+                              "runs": [
+                                {
+                                  "type": "text",
+                                  "text": "Inner B"
+                                }
+                              ],
+                              "styleName": "Normal",
+                              "marginLeftPx": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "text": "Outer cell, after the nested table.",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Outer cell, after the nested table."
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Plain neighbour cell.",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Plain neighbour cell."
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_NESTED_TABLE",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,528 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "number",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "startAt": 1,
+          "textIndentPx": -48,
+          "marginLeftPx": 48
+        },
+        {
+          "level": 1,
+          "type": "number",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "startAt": 1,
+          "textIndentPx": -48,
+          "marginLeftPx": 72
+        }
+      ]
+    },
+    {
+      "listId": "l1",
+      "levels": [
+        {
+          "level": 0,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "•",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Symbol",
+          "textIndentPx": -24
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Engagement Report",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Engagement Report",
+          "formatting": {
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 37.3333,
+            "letterSpacingPx": -0.6667
+          }
+        }
+      ],
+      "styleName": "Title",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Prepared 14 March 2026",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Prepared 14 March 2026",
+          "formatting": {
+            "color": "#595959"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "",
+      "runs": [],
+      "styleName": "Normal",
+      "empty": true,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Background",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Background"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "I.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Orbis India is a manufacturing business with operations in three states.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Orbis India is a "
+        },
+        {
+          "type": "text",
+          "text": "manufacturing",
+          "formatting": {
+            "bold": true
+          }
+        },
+        {
+          "type": "text",
+          "text": " business with operations in three states."
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "restart": true,
+        "startAt": 1,
+        "marker": {
+          "type": "number",
+          "text": "1.1",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "We understand that the current arrangement expires in June.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "We understand that the "
+        },
+        {
+          "type": "text",
+          "text": "current",
+          "formatting": {
+            "italic": true
+          }
+        },
+        {
+          "type": "text",
+          "text": " arrangement expires in June."
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "1.2",
+          "numberFormat": "decimal",
+          "levelText": "%1.%2",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Scope",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Scope"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -48,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "number",
+          "text": "II.",
+          "numberFormat": "upper-roman",
+          "levelText": "%1.",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Deliverables",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Deliverables",
+          "formatting": {
+            "color": "#2f5496",
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 17.3333
+          }
+        }
+      ],
+      "styleName": "Heading 2",
+      "headingLevel": 2,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "A written report",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A written report"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l1",
+        "level": 0,
+        "lfo": "lfo2",
+        "instance": "list-2-l1-lfo2",
+        "marker": {
+          "type": "bullet",
+          "text": "·",
+          "glyph": "•",
+          "rawGlyph": "",
+          "font": "Symbol",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "A presentation to the board",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A presentation to the board"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 48,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l1",
+        "level": 0,
+        "lfo": "lfo2",
+        "instance": "list-2-l1-lfo2",
+        "marker": {
+          "type": "bullet",
+          "text": "·",
+          "glyph": "•",
+          "rawGlyph": "",
+          "font": "Symbol",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Fees",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Fees",
+          "formatting": {
+            "color": "#2f5496",
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 17.3333
+          }
+        }
+      ],
+      "styleName": "Heading 2",
+      "headingLevel": 2,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "table",
+      "depth": 0,
+      "gridColumnCount": 2,
+      "columns": [
+        {
+          "widthPx": 266.6667,
+          "widthPercent": 66.667
+        },
+        {
+          "widthPx": 133.3333,
+          "widthPercent": 33.333
+        }
+      ],
+      "rows": [
+        {
+          "section": "head",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "header": true,
+              "backgroundColor": "#d9e2f3",
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Phase",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Phase",
+                      "formatting": {
+                        "bold": true
+                      }
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "header": true,
+              "backgroundColor": "#d9e2f3",
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Fee",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Fee",
+                      "formatting": {
+                        "bold": true
+                      }
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Diagnostic",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Diagnostic"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "₹4,50,000",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "₹4,50,000"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "alignment": "right",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Implementation",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Implementation"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "₹9,00,000",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "₹9,00,000"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "alignment": "right",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "",
+      "runs": [],
+      "styleName": "Normal",
+      "empty": true,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Full terms are at example.com/terms.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Full terms are at "
+        },
+        {
+          "type": "text",
+          "text": "example.com/terms",
+          "link": "link-1"
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [],
+  "hyperlinks": [
+    {
+      "id": "link-1",
+      "href": "https://example.com/terms",
+      "rawHref": "https://example.com/terms"
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
+      "severity": "info",
+      "fidelity": "EXACT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 2
+    }
+  ]
+}

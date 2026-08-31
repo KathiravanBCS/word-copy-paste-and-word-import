@@ -1,0 +1,176 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [
+    {
+      "listId": "l0",
+      "levels": [
+        {
+          "level": 0,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "▫",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Wingdings",
+          "textIndentPx": -24,
+          "marginLeftPx": 24
+        },
+        {
+          "level": 1,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "➔",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Wingdings",
+          "textIndentPx": -24,
+          "marginLeftPx": 72
+        },
+        {
+          "level": 2,
+          "type": "bullet",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "bulletGlyph": "◊",
+          "bulletGlyphRaw": "",
+          "bulletFont": "Symbol",
+          "textIndentPx": -24,
+          "marginLeftPx": 120
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Hollow square bullet",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Hollow square bullet"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 24,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 0,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "¨",
+          "glyph": "▫",
+          "rawGlyph": "",
+          "font": "Wingdings",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Arrow bullet",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Arrow bullet"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 72,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 1,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "Ø",
+          "glyph": "➔",
+          "rawGlyph": "",
+          "font": "Wingdings",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "text": "Diamond bullet",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Diamond bullet"
+        }
+      ],
+      "styleName": "List Paragraph",
+      "marginLeftPx": 120,
+      "textIndentPx": -24,
+      "listItem": {
+        "listId": "l0",
+        "level": 2,
+        "lfo": "lfo1",
+        "instance": "list-1-l0-lfo1",
+        "marker": {
+          "type": "bullet",
+          "text": "à",
+          "glyph": "◊",
+          "rawGlyph": "",
+          "font": "Symbol",
+          "numberFormat": "bullet",
+          "levelText": "",
+          "source": "mso-list-ignore"
+        }
+      }
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
+      "code": "WORD_SYMBOL_FONT_MAPPED",
+      "severity": "info",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "table",
+      "depth": 0,
+      "gridColumnCount": 2,
+      "columns": [
+        {
+          "widthPx": 208,
+          "widthPercent": 50
+        },
+        {
+          "widthPx": 208,
+          "widthPercent": 50
+        }
+      ],
+      "rows": [
+        {
+          "section": "head",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "header": true,
+              "backgroundColor": "#d9e2f3",
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Region",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Region",
+                      "formatting": {
+                        "bold": true
+                      }
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "header": true,
+              "backgroundColor": "#d9e2f3",
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "Revenue",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "Revenue",
+                      "formatting": {
+                        "bold": true
+                      }
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "North",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "North"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "1,240",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "1,240"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "alignment": "right",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "section": "body",
+          "cells": [
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "South",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "South"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "marginLeftPx": 0
+                }
+              ]
+            },
+            {
+              "colSpan": 1,
+              "rowSpan": 1,
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "text": "980",
+                  "runs": [
+                    {
+                      "type": "text",
+                      "text": "980"
+                    }
+                  ],
+                  "styleName": "Normal",
+                  "alignment": "right",
+                  "marginLeftPx": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "",
+      "runs": [],
+      "styleName": "Normal",
+      "empty": true,
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

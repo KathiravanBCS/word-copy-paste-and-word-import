@@ -1,0 +1,98 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Right aligned",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Right aligned"
+        }
+      ],
+      "styleName": "Normal",
+      "alignment": "right",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Justified text that runs long enough to show the justification when it is rendered in a narrow column.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Justified text that runs long enough to show the justification when it is rendered in a narrow column."
+        }
+      ],
+      "styleName": "Normal",
+      "alignment": "justify",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Hanging indent with space before and after and one-and-a-half line spacing.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Hanging indent with space before and after and one-and-a-half line spacing."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 48,
+      "textIndentPx": -24
+    },
+    {
+      "type": "paragraph",
+      "text": "A bordered, shaded paragraph.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A bordered, shaded paragraph.",
+          "formatting": {
+            "highlight": "#deeaf6"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Before\tafter a tab.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Before"
+        },
+        {
+          "type": "tab"
+        },
+        {
+          "type": "text",
+          "text": "after a tab."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "First paragraph of a new page.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "First paragraph of a new page."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

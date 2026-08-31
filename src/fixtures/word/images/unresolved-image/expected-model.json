@@ -1,0 +1,72 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 18
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "The report includes the following diagram.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "The report includes the following diagram."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "￼",
+      "runs": [
+        {
+          "type": "image",
+          "imageId": "img-1"
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Figure 1.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Figure 1."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [
+    {
+      "id": "img-1",
+      "resolution": "unresolved",
+      "origin": "none",
+      "originalSource": "file:///C:/Users/jdoe/AppData/Local/Temp/msohtmlclip1/01/clip_image001.png",
+      "widthPx": 602,
+      "heightPx": 246,
+      "hasSource": false
+    }
+  ],
+  "hyperlinks": [],
+  "diagnostics": [
+    {
+      "code": "WORD_LOCAL_FILE_IMAGE",
+      "severity": "warning",
+      "fidelity": "APPROXIMATED",
+      "count": 1
+    },
+    {
+      "code": "WORD_UNRESOLVED_IMAGE",
+      "severity": "warning",
+      "fidelity": "APPROXIMATED",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Engagement Report",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Engagement Report",
+          "formatting": {
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 37.3333,
+            "letterSpacingPx": -0.6667
+          }
+        }
+      ],
+      "styleName": "Title",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Background",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Background",
+          "formatting": {
+            "color": "#2f5496",
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 21.3333
+          }
+        }
+      ],
+      "styleName": "Heading 1",
+      "headingLevel": 1,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Body text under the first heading.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Body text under the first heading."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Scope of work",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Scope of work",
+          "formatting": {
+            "color": "#2f5496",
+            "fontFamily": "Calibri Light",
+            "fontSizePx": 17.3333
+          }
+        }
+      ],
+      "styleName": "Heading 2",
+      "headingLevel": 2,
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Body text under the second heading.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Body text under the second heading."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "A real h3 element",
+      "runs": [
+        {
+          "type": "text",
+          "text": "A real h3 element"
+        }
+      ],
+      "headingLevel": 3
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

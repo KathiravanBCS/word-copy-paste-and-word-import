@@ -1,0 +1,60 @@
+{
+  "name": "word-clipboard-engine",
+  "version": "0.1.0",
+  "description": "High-fidelity Microsoft Word clipboard parser: Word HTML -> canonical Word Document Model -> clean HTML. Editor independent.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "tsc -p tsconfig.build.json && vite build --config vite.lib.config.ts",
+    "build:demo": "vite build --config vite.config.ts",
+    "preview": "vite preview --config vite.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:word": "vitest run src/tests/regression src/tests/parsing",
+    "test:golden": "vitest run src/tests/regression",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "fixtures:bless": "vitest run src/tests/regression --update-golden"
+  },
+  "keywords": [
+    "word",
+    "clipboard",
+    "paste-from-word",
+    "docx",
+    "mso",
+    "html",
+    "parser",
+    "office"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^8.57.1",
+    "happy-dom": "^15.11.7",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {}
+}

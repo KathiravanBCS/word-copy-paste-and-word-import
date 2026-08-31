@@ -1,0 +1,245 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Normal",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Normal"
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Bold",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Bold",
+          "formatting": {
+            "bold": true
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Italic",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Italic",
+          "formatting": {
+            "italic": true
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Bold and italic",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Bold and italic",
+          "formatting": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Underline",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Underline",
+          "formatting": {
+            "underline": "single"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Strikethrough",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Strikethrough",
+          "formatting": {
+            "strike": true
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Red text",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Red text",
+          "formatting": {
+            "color": "#ff0000"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Highlighted",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Highlighted",
+          "formatting": {
+            "highlight": "#ffff00"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Different font",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Different font",
+          "formatting": {
+            "fontFamily": "Courier New"
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Different size",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Different size",
+          "formatting": {
+            "fontSizePx": 24
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Water is H2O and E = mc2.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Water is H"
+        },
+        {
+          "type": "text",
+          "text": "2",
+          "formatting": {
+            "verticalAlign": "sub"
+          }
+        },
+        {
+          "type": "text",
+          "text": "O and E = mc"
+        },
+        {
+          "type": "text",
+          "text": "2",
+          "formatting": {
+            "verticalAlign": "super"
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Expanded spacing",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Expanded spacing",
+          "formatting": {
+            "letterSpacingPx": 2
+          }
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Hello world and goodbye.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Hello "
+        },
+        {
+          "type": "text",
+          "text": "world",
+          "formatting": {
+            "bold": true,
+            "color": "#c00000"
+          }
+        },
+        {
+          "type": "text",
+          "text": " and "
+        },
+        {
+          "type": "text",
+          "text": "goodbye",
+          "formatting": {
+            "italic": true
+          }
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [],
+  "hyperlinks": [],
+  "diagnostics": []
+}

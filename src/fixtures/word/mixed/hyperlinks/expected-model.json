@@ -1,0 +1,146 @@
+{
+  "detection": {
+    "isWord": true,
+    "source": "word-desktop",
+    "signalCount": 15
+  },
+  "lists": [],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "See the full report for details.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "See "
+        },
+        {
+          "type": "text",
+          "text": "the ",
+          "link": "link-1"
+        },
+        {
+          "type": "text",
+          "text": "full report",
+          "link": "link-1",
+          "formatting": {
+            "bold": true
+          }
+        },
+        {
+          "type": "text",
+          "text": " for details."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Contact someone@example.com.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Contact "
+        },
+        {
+          "type": "text",
+          "text": "someone@example.com",
+          "link": "link-2"
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Jump to the section below.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Jump to "
+        },
+        {
+          "type": "text",
+          "text": "the section",
+          "link": "link-3"
+        },
+        {
+          "type": "text",
+          "text": " below."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "Open the appendix.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "Open "
+        },
+        {
+          "type": "text",
+          "text": "the appendix",
+          "link": "link-4"
+        },
+        {
+          "type": "text",
+          "text": "."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    },
+    {
+      "type": "paragraph",
+      "text": "The bookmarked section.",
+      "runs": [
+        {
+          "type": "text",
+          "text": "The bookmarked section."
+        }
+      ],
+      "styleName": "Normal",
+      "marginLeftPx": 0
+    }
+  ],
+  "images": [],
+  "hyperlinks": [
+    {
+      "id": "link-1",
+      "href": "https://example.com/report",
+      "rawHref": "https://example.com/report"
+    },
+    {
+      "id": "link-2",
+      "href": "mailto:someone@example.com",
+      "rawHref": "mailto:someone@example.com"
+    },
+    {
+      "id": "link-3",
+      "href": "#_Toc123456789",
+      "rawHref": "#_Toc123456789"
+    },
+    {
+      "id": "link-4",
+      "href": "",
+      "rawHref": "file:///C:/Users/jdoe/Documents/appendix.docx",
+      "blocked": true
+    }
+  ],
+  "diagnostics": [
+    {
+      "code": "SECURITY_URL_BLOCKED",
+      "severity": "warning",
+      "fidelity": "APPROXIMATED",
+      "count": 1
+    }
+  ]
+}
