@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2713%27 font-size=%2713%27%3E%E2%97%8F%3C/text%3E%3C/svg%3E"
+    />
+    <title>RoosterJS Integration — Word Clipboard Engine</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .rooster-host {
+        max-width: 760px;
+        margin: 16px auto;
+        padding: 0 16px;
+      }
+      #rooster-editor {
+        min-height: 360px;
+        padding: 0.6in 0.75in;
+        background: #fff;
+        border: 1px solid var(--border, #e2e2e5);
+        border-radius: 6px;
+        font-family: Calibri, "Segoe UI", system-ui, sans-serif;
+        font-size: 11pt;
+        line-height: 1.35;
+        outline: none;
+      }
+      #rooster-editor:focus {
+        border-color: var(--accent, #2563eb);
+      }
+      #rooster-editor img {
+        max-width: 100%;
+        height: auto;
+      }
+      #rooster-editor table {
+        border-collapse: collapse;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <h1>RoosterJS Integration</h1>
+        <p>
+          A live, editable RoosterJS surface whose paste handling is this engine, not
+          RoosterJS's own.
+        </p>
+      </div>
+      <nav class="app-nav">
+        <a href="../">Fixture gallery</a>
+        <a href="../clipboard-lab/">Clipboard Lab</a>
+      </nav>
+    </header>
+
+    <main class="rooster-host">
+      <p class="note">
+        This is a real <a href="https://microsoft.github.io/roosterjs" target="_blank"
+          rel="noreferrer noopener">RoosterJS</a> editor — <code>createEditor()</code> from
+        the <code>roosterjs</code> package, unmodified. The only addition is one plugin,
+        <code>WordClipboardEnginePlugin</code>, which intercepts RoosterJS's own
+        <code>BeforePasteEvent</code> and hands Word payloads to this engine instead of
+        RoosterJS's built-in Word-paste handling. Everything else about the editor —
+        typing, undo, the toolbar commands below, non-Word paste — is exactly what
+        RoosterJS already does.
+      </p>
+      <p class="note">
+        Paste real content from Microsoft Word below, or use <strong>Paste a fixture</strong>
+        to simulate one without a live Word document. Then try editing it: click right
+        before a bullet or number and press Backspace — the marker comes out as a whole
+        unit, never one corrupted character at a time. That is the difference this page
+        exists to demonstrate; see <a href="../../../docs/RICH-TEXT-EDITOR.md">docs/RICH-TEXT-EDITOR.md</a>.
+      </p>
+
+      <div class="paste-actions" style="margin-bottom: 10px">
+        <select id="fixture-picker" class="select" aria-label="Paste a fixture">
+          <option value="">Paste a fixture…</option>
+        </select>
+        <button id="clear-editor" type="button" class="button button-quiet">Clear editor</button>
+        <span id="status" class="pill" style="margin-left: auto"></span>
+      </div>
+
+      <div id="rooster-editor" contenteditable="true" spellcheck="false"></div>
+    </main>
+
+    <footer class="app-footer">
+      <span>word-clipboard-engine + roosterjs</span>
+      <span id="footer-status">idle</span>
+    </footer>
+
+    <script type="module" src="./editor.ts"></script>
+  </body>
+</html>

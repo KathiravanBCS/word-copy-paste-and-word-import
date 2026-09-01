@@ -22,7 +22,7 @@ describe('list rendering', () => {
     // element renders "1.1.1    Text" (Word's actual spacing) — see the
     // 'element marker mode' describe block below for the geometry assertion.
     const { html } = renderWordDocument(byId('bullets/bullet-default'));
-    expect(html).toContain('<span class="wce-marker" aria-hidden="true">•</span>');
+    expect(html).toContain('<span class="wce-marker" contenteditable="false" aria-hidden="true">•</span>');
     expect(html).not.toContain('list-style-type: wce-');
   });
 
@@ -59,7 +59,7 @@ describe('list rendering', () => {
 
   it('renders a marker element by default, and can render native markers when asked to', () => {
     const byDefault = renderWordDocument(byId('bullets/bullet-default'));
-    expect(byDefault.html).toContain('<span class="wce-marker" aria-hidden="true">•</span>');
+    expect(byDefault.html).toContain('<span class="wce-marker" contenteditable="false" aria-hidden="true">•</span>');
     expect(byDefault.css).toContain('list-style-type: none');
     expect(byDefault.css).toContain('text-indent: -24px');
 

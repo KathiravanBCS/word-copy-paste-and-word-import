@@ -179,6 +179,29 @@ Hyperlinks 1  bookmarks 0  page breaks 0
 Fidelity: EXACT 2, EQUIVALENT 3, APPROXIMATED 0, UNSUPPORTED 0
 ```
 
+## Rich text editor integration
+
+The core stays editor-agnostic — zero runtime dependencies, nothing in
+`src/index.ts` imports any editor. But the whole point of the model is to be
+useful *inside* one, and that has its own two problems a static render
+doesn't: a marker sitting in live editable content can be typed into or
+corrupted by Backspace, and most non-trivial editors convert whatever you
+paste into their own internal document model, discarding anything that model
+doesn't represent.
+
+Both are fixed and demonstrated with a real
+[RoosterJS](https://microsoft.github.io/roosterjs) editor:
+
+```bash
+npm run dev   # open /rooster-editor/
+```
+
+One additional plugin (`WordClipboardEnginePlugin`, ~150 lines) is the entire
+integration; `createEditor()` itself is unmodified RoosterJS. See
+[docs/RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) for what it took to make
+it hold up — verified in Chromium, not assumed — and for the pattern to reuse
+against any other editor.
+
 ## Clipboard Lab
 
 ```bash
@@ -212,6 +235,7 @@ UPDATE_FIXTURES=1 npm test   # re-bless golden fixtures (read the diff first)
 | [WORD-CLIPBOARD.md](docs/WORD-CLIPBOARD.md) | what Word actually puts on the clipboard, in detail |
 | [LIST-PARSING.md](docs/LIST-PARSING.md) | the hardest part: markers, numbering, identity, indentation |
 | [FIDELITY.md](docs/FIDELITY.md) | every diagnostic code and what it means |
+| [RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) | using this inside a live editor — marker protection, why CSS must be inlined, the RoosterJS integration |
 | [TESTING.md](docs/TESTING.md) | fixtures, golden tests, and capturing a real Word payload |
 
 ## Licence

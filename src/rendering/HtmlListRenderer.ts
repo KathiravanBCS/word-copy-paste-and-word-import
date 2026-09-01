@@ -363,7 +363,21 @@ export function renderMarkerElement(item: ListItemInfo, options: ListRenderOptio
   if (!text) return '';
   // `aria-hidden` because the list element already conveys "this is a list
   // item" to assistive technology; the glyph would be read out twice.
-  return `<span class="${prefix}-marker" aria-hidden="true">${escapeHtmlText(text)}</span>`;
+  //
+  // `contenteditable="false"` because this HTML is not only ever displayed
+  // read-only — it is routinely inserted into a live editable surface (a
+  // rich-text editor's paste handler). Without it, a cursor placed inside or
+  // before the marker lets ordinary typing, backspace and delete edit the
+  // glyph directly: "•" becomes "-" because someone typed a dash next to it,
+  // or a stray keystroke lands inside the span and the marker is now
+  // literally text again — the exact failure this whole engine exists to
+  // prevent, just reintroduced one editing session after the paste. Marking
+  // the span as an atomic, non-editable island is the standard technique
+  // every mainstream rich-text editor uses for this (mentions, emoji, and
+  // other generated "chips" inside editable text). It is inert HTML when the
+  // page itself is not editable, so it costs nothing in the static/display
+  // case this attribute doesn't apply to.
+  return `<span class="${prefix}-marker" contenteditable="false" aria-hidden="true">${escapeHtmlText(text)}</span>`;
 }
 
 /** Compute a list item's indentation, honouring the parent list's. */
