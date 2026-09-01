@@ -45,15 +45,20 @@ npm run dev
 Open `/rooster-editor/`. It's a real `createEditor()` from the `roosterjs`
 package, completely unmodified, with one additional plugin:
 `WordClipboardEnginePlugin`. Paste real Word content, or use **Paste a
-fixture** to simulate one. Try both of the things this page exists to
+fixture** to simulate one. Try all three of the things this page exists to
 demonstrate:
 
 - Click at the end of a numbered or bulleted item and press Enter — the next
   item gets the next number or bullet automatically, drawn by the browser,
   the same as typing a new item in Word itself.
-- Click right before a marker that *isn't* auto-numbering (a composite level
-  like "1.1", see § 3) and press Backspace — the whole marker still comes out
-  as one unit, never one corrupted character at a time.
+- Click at the end of a **composite**-numbered item (a "1.1"/"1.1.1" style
+  level, see § 3) and press Enter — the new item gets numbered too, just not
+  instantly: it appears once you move on to something else (typically the
+  next Enter, or clicking away), because that number comes from this plugin's
+  own JS, not the browser — § 4 explains why, and why the short delay is
+  deliberate rather than a bug.
+- Click right before any marker and press Backspace — the whole marker still
+  comes out as one unit, never one corrupted character at a time.
 
 ## 1. Protecting the marker: `contenteditable="false"`
 
@@ -188,10 +193,10 @@ text can't become a single CSS counter-style now falls back to the same
 `element` rendering non-native mode uses — a real span, protected by
 `contenteditable="false"` (§ 1), needing nothing but the inline `style` this
 engine already sets, which is what actually survives an editor's content
-model. Nothing was really lost: a composite counter like "1.1" was never
-going to auto-continue from a single CSS counter-style anyway, so the
-fallback gives up an auto-continuation `native` mode could never have
-delivered for that case regardless of RoosterJS.
+model. A composite counter like "1.1" was never going to auto-continue from a
+single CSS counter-style, so this fallback gives up nothing the browser
+itself could have delivered — what it does give up, the plugin gets back a
+different way, in § 4.
 
 Verified end to end: pasting a multilevel Word list where the top level is
 simple roman numbering (I., II., …) and the second level is composite ("1.1",
@@ -200,7 +205,68 @@ simple roman numbering (I., II., …) and the second level is composite ("1.1",
 time and never vanish, exactly matching what the engine's own renderer
 produced before RoosterJS ever saw it.
 
-## 4. A limitation this integration has, honestly
+## 4. Auto-continuing composite markers too, in JS
+
+§ 3 leaves one thing genuinely undone: a composite marker's *text* survives
+now, but it does not renumber itself the way a real `::marker` does. Press
+Enter at the end of "1.4 Given" and the new item still reads nothing — a
+plain `contenteditable="false"` span has no counter to advance, because
+nothing (there is no such CSS mechanism) is watching it.
+
+`WordClipboardEnginePlugin` closes that gap itself, in
+`renumberCompositeMarkers`: it listens for RoosterJS's `contentChanged` event
+(skipping the one that *is* the paste itself — those numbers already came
+from Word) and, on every other edit, recomputes every composite marker in the
+editor from its current position in the list. Concretely: split a marker's
+own text on its digit runs to recover its shape ("1.1." → literal parts
+`["", ".", "."]` around two placeholders), then refill those placeholders
+from the item's real position at each nesting level — the 2nd sub-item of the
+1st item is `[1, 2]`, giving "1.2". An item a fresh Enter created with no
+marker of its own gets one synthesised from a sibling's, not left blank.
+
+That position lookup needed its own fix along the way: `HtmlRenderer.ts`
+nests a sub-list *inside* its owning `<li>` (`<li>Background<ol>…</ol></li>`),
+but verified directly, RoosterJS does not keep that shape — a real paste
+comes back with the sub-list as Background's *sibling* instead
+(`<li>Background</li><ol>…</ol>`), because RoosterJS's list representation
+tracks nesting as a per-item level stack, not DOM containment. (It is not
+even consistent about it — a single-item sub-list came back properly nested
+in the same document. `listContainer()` in the plugin handles both shapes,
+rather than assuming either.)
+
+Two things stop this from racing the person actually typing:
+
+- **A brand-new item never gets a marker while the caret is still in it.**
+  Verified directly: synthesising one immediately (the moment Enter creates
+  the empty item) works until the very next keystroke, at which point
+  RoosterJS's own DOM regeneration — which has no idea our marker is
+  supposed to stay glued to the front of the line, since we put it there
+  outside its content model entirely — was seen to relocate it mid-word.
+  Skipping the item the `Selection` is currently anchored in avoids the race
+  by never touching a line that is still being typed into; it gets its
+  marker as soon as *something else* changes (typically the next Enter).
+- **The very last item still gets numbered eventually.** Skipping the active
+  item forever would leave whatever was typed last permanently blank once
+  nothing else changes it. A `focusout` listener on the document catches
+  that: once the editor has genuinely lost focus (checked a tick later, since
+  `hasFocus()` still reports the outgoing state on the event itself), nothing
+  is mid-keystroke anywhere, so the same renumbering pass runs once more with
+  no item excluded.
+
+Scoped honestly, not silently: this recovers **decimal** composite numbering
+only — "1.1", "1.1.1", the overwhelmingly common case (business, legal,
+technical section numbering, this file's own worked examples). A composite
+that mixes formats (Word's rarer "I.1.a", roman then decimal then alpha) has
+no digit run for its roman or alpha segments and is left exactly as § 3 leaves
+it: a real, protected, static marker, just not one this function knows how to
+advance. And because recomputation always starts from the document's current
+structural position, an edit *anywhere* resequences every composite marker
+in the document from 1 at each level — a paste that started mid-document at
+"3.4" keeps reading "3.4" until the next edit, then renumbers like everything
+else. Preserving that offset indefinitely would need the same Word-level
+metadata § 3 already established does not survive RoosterJS's round trip.
+
+## 5. A limitation this integration has, honestly
 
 Word content the engine cannot resolve to a real image (a `file:///` path
 with no clipboard bytes to recover) renders as a labelled placeholder — a
