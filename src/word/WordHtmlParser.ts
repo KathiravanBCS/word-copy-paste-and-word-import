@@ -21,7 +21,7 @@ import {
   parseHtmlDocument,
   tagNameOf,
 } from '../util/dom.js';
-import { preScrubRawHtml, sanitizeTree } from '../util/security.js';
+import { preScrubDiagnosticCode, preScrubRawHtml, sanitizeTree } from '../util/security.js';
 import { parseInlineStyle } from './WordCssTokenizer.js';
 import {
   parseParagraphFormattingFromCss,
@@ -141,10 +141,17 @@ export function parseWordHtml(
   }
   const truncated =
     rawHtml.length > ctx.limits.maxHtmlLength ? rawHtml.slice(0, ctx.limits.maxHtmlLength) : rawHtml;
-  // Neutralise executing/loading elements in the text before any DOM
+  // Remove executing/loading elements from the text before any DOM
   // implementation gets to act on them. `rawHtml` on the document is untouched.
-  const workingHtml = preScrubRawHtml(truncated);
-  const dom = parseHtmlDocument(workingHtml);
+  const scrubbed = preScrubRawHtml(truncated);
+  for (const [tag, occurrences] of Object.entries(scrubbed.removed)) {
+    diagnostics.warn(
+      preScrubDiagnosticCode(tag),
+      `${occurrences} <${tag}> element(s) were removed from the payload before parsing. Clipboard HTML is never executed and never loads remote resources.`,
+      { location: { tagName: tag }, details: { occurrences }, fidelity: 'EQUIVALENT' },
+    );
+  }
+  const dom = parseHtmlDocument(scrubbed.html);
   const body = dom.body ?? dom.documentElement;
 
   // --- 5. honour the CF_HTML fragment boundary ---------------------------

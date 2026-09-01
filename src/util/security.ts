@@ -37,35 +37,134 @@ const FORBIDDEN_TAGS = new Set([
 const STRIPPED_TAGS = new Set(['style', 'title', 'head']);
 
 /**
- * Tags neutralised in the raw text *before* the DOM ever sees them.
+ * Neutralise executing and resource-loading elements in the raw text, before
+ * any DOM implementation acts on them.
  *
  * `DOMParser` documents are inert in a browser — no scripts run, no
  * subresources load — but the engine also runs under Node DOM shims, and not
- * all of them honour that. Relying on the host's parser to be inert is a
- * dependency on somebody else's correctness for a security property, so these
- * elements are renamed to an inert custom element in the source text first.
+ * all of them honour that. Relying on the host's parser to be inert makes a
+ * security property depend on somebody else's correctness.
  *
- * The rename is applied to the working copy only. `document.rawHtml` keeps the
- * original bytes, so the payload can still be inspected exactly as it arrived.
+ * The elements are **deleted from the source text**, never renamed. Renaming
+ * looks tidier and is badly wrong: `<link>` is a void element, and a custom
+ * element by that name is not. Word puts `<link rel=File-List …>` in the head
+ * of every clipboard payload, so a renamed `<link>` is hoisted into the body,
+ * stays open, swallows the entire document as its children, and is then
+ * removed along with all of it. The symptom is a paste that yields zero
+ * paragraphs — silently, because the payload parsed "successfully".
+ *
+ * The scrub applies to the working copy only. `document.rawHtml` keeps the
+ * original bytes.
  */
-const NEUTRALISED_TAGS = ['script', 'iframe', 'frame', 'frameset', 'embed', 'applet', 'link', 'base'];
 
-export const NEUTRALISED_PREFIX = 'wce-blocked-';
+/** Elements whose content is not document content: drop tag and children. */
+const RAW_TEXT_TAGS = ['script', 'noscript', 'noframes', 'applet'];
 
-export function preScrubRawHtml(html: string): string {
+/** Void elements: no children to lose, so only the tag itself is dropped. */
+const VOID_TAGS = ['link', 'base', 'embed', 'frame'];
+
+/**
+ * Container elements: the element goes, its children stay. Deleting a
+ * container's subtree is how content disappears, so it is never done here —
+ * `sanitizeTree` still walks whatever is left.
+ *
+ * `<object>` is deliberately absent. It does not load anything in an inert
+ * document, and it is how Word represents an embedded OLE object — removing it
+ * here would destroy the very thing the OLE diagnostic exists to report.
+ */
+const CONTAINER_TAGS = ['iframe', 'frameset'];
+
+/**
+ * The attribute part of a start tag, tolerating `>` inside quoted values.
+ *
+ * Written so the alternatives cannot match the same text two ways. The obvious
+ * spelling — `(?:"[^"]*"|'[^']*'|[^>])*` — is ambiguous, because `[^>]` also
+ * matches the characters inside a quoted value, and the engine then explores
+ * exponentially many partitions of the same input. That turned a 1 ms parse
+ * into 771 ms on a small fixture and hung the suite outright on a large one.
+ */
+const TAG_ATTRIBUTES = `[^>"']*(?:(?:"[^"]*"|'[^']*')[^>"']*)*`;
+
+/** Match a start tag, tolerating `>` inside quoted attribute values. */
+function startTagPattern(tag: string, flags = 'gi'): RegExp {
+  return new RegExp(`<${tag}\\b${TAG_ATTRIBUTES}>`, flags);
+}
+
+export interface PreScrubResult {
+  html: string;
+  /** What was removed, by tag name, for diagnostics. */
+  removed: Record<string, number>;
+}
+
+export function preScrubRawHtml(html: string): PreScrubResult {
   let out = html;
-  for (const tag of NEUTRALISED_TAGS) {
-    const open = new RegExp(`<${tag}(?=[\\s/>])`, 'gi');
-    const close = new RegExp(`</${tag}(?=[\\s>])`, 'gi');
-    out = out.replace(open, `<${NEUTRALISED_PREFIX}${tag}`);
-    out = out.replace(close, `</${NEUTRALISED_PREFIX}${tag}`);
-    // The tag with nothing after the name, e.g. `<script>` / `</script>`.
-    out = out.replace(new RegExp(`<${tag}>`, 'gi'), `<${NEUTRALISED_PREFIX}${tag}>`);
-    out = out.replace(new RegExp(`</${tag}>`, 'gi'), `</${NEUTRALISED_PREFIX}${tag}>`);
+  const removed: Record<string, number> = {};
+  const count = (tag: string, n: number): void => {
+    if (n > 0) removed[tag] = (removed[tag] ?? 0) + n;
+  };
+
+  for (const tag of RAW_TEXT_TAGS) {
+    const paired = new RegExp(`<${tag}\\b${TAG_ATTRIBUTES}>[\\s\\S]*?<\\/${tag}\\s*>`, 'gi');
+    let n = 0;
+    out = out.replace(paired, () => {
+      n++;
+      return '';
+    });
+    // An unclosed raw-text element runs to the end of the document — that is
+    // how the HTML tokenizer reads it, so removing to the end is correct.
+    const unclosed = new RegExp(`<${tag}\\b${TAG_ATTRIBUTES}>[\\s\\S]*$`, 'i');
+    if (unclosed.test(out)) {
+      out = out.replace(unclosed, '');
+      n++;
+    }
+    count(tag, n);
   }
+
+  for (const tag of VOID_TAGS) {
+    let n = 0;
+    out = out.replace(startTagPattern(tag), () => {
+      n++;
+      return '';
+    });
+    count(tag, n);
+  }
+
+  for (const tag of CONTAINER_TAGS) {
+    let n = 0;
+    out = out.replace(startTagPattern(tag), () => {
+      n++;
+      return '';
+    });
+    out = out.replace(new RegExp(`<\\/${tag}\\s*>`, 'gi'), '');
+    count(tag, n);
+  }
+
   // `<meta http-equiv=refresh>` is a navigation instruction, not metadata.
-  out = out.replace(/<meta\b([^>]*http-equiv\s*=\s*["']?refresh)/gi, `<${NEUTRALISED_PREFIX}meta$1`);
-  return out;
+  // Matched as a whole tag and then filtered, rather than with a single
+  // pattern that has to look for the attribute in among the others.
+  let refresh = 0;
+  out = out.replace(startTagPattern('meta'), (tag) => {
+    if (!/http-equiv\s*=\s*["']?refresh/i.test(tag)) return tag;
+    refresh++;
+    return '';
+  });
+  count('meta', refresh);
+
+  return { html: out, removed };
+}
+
+/** The diagnostic code a pre-scrub removal is reported under. */
+export function preScrubDiagnosticCode(tag: string): string {
+  return RAW_TEXT_TAGS.includes(tag)
+    ? DiagnosticCode.SECURITY_SCRIPT_REMOVED
+    : DiagnosticCode.SECURITY_EXTERNAL_RESOURCE;
+}
+
+/** Move an element's children into its place, then leave it empty. */
+function unwrapChildren(element: Element): void {
+  const parent = element.parentNode;
+  if (!parent) return;
+  while (element.firstChild) parent.insertBefore(element.firstChild, element);
 }
 
 export interface SanitizeResult {
@@ -85,20 +184,15 @@ export function sanitizeTree(root: Node, diagnostics: DiagnosticCollector): Sani
     for (const child of childNodesOf(node)) {
       if (!isElement(child)) continue;
       const tag = tagNameOf(child);
-      if (tag.startsWith(NEUTRALISED_PREFIX)) {
-        const original = tag.slice(NEUTRALISED_PREFIX.length);
-        child.parentNode?.removeChild(child);
-        result.removedElements++;
-        diagnostics.warn(
-          original === 'script'
-            ? DiagnosticCode.SECURITY_SCRIPT_REMOVED
-            : DiagnosticCode.SECURITY_EXTERNAL_RESOURCE,
-          `<${original}> was neutralised before parsing and removed. Clipboard HTML is never executed and never loads remote resources.`,
-          { location: { tagName: original }, fidelity: 'EQUIVALENT' },
-        );
-        continue;
-      }
       if (FORBIDDEN_TAGS.has(tag)) {
+        // Anything reaching here slipped past the pre-scrub, which means the
+        // host parser put it somewhere unexpected — so its children may well
+        // be real document content that a mis-parse swept inside it. They are
+        // unwrapped rather than deleted, except for the raw-text elements
+        // whose children are code and not content. Deleting a subtree on the
+        // strength of an element name is how a whole paste disappears.
+        const isRawText = tag === 'script' || tag === 'noscript' || tag === 'applet';
+        if (!isRawText) unwrapChildren(child);
         child.parentNode?.removeChild(child);
         result.removedElements++;
         diagnostics.warn(

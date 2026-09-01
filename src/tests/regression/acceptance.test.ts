@@ -305,7 +305,11 @@ describe('acceptance criteria', () => {
 
   it('16. the engine has no runtime dependencies', async () => {
     const packageJson = await import('../../../package.json', { with: { type: 'json' } });
-    expect(packageJson.default.dependencies).toEqual({});
+    // Tolerant of both spellings: npm strips an empty `dependencies` key on
+    // uninstall, and "absent" means the same thing as "empty" here.
+    const dependencies = (packageJson.default as { dependencies?: Record<string, string> })
+      .dependencies;
+    expect(Object.keys(dependencies ?? {})).toEqual([]);
   });
 
   it('bonus: bullet glyphs never appear in any text node, across all fixtures', () => {

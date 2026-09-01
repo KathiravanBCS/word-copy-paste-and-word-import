@@ -64,7 +64,7 @@ its own has its rows stripped by the HTML parser. So the trim is done by
 removing siblings outward from each marker in the DOM, which preserves the
 enclosing table.
 
-### Why executing elements are neutralised in the text
+### Why executing elements are removed from the text
 
 `DOMParser` documents are inert in a browser: no scripts run, no subresources
 load. But the engine also runs under Node DOM shims, and not all of them honour
@@ -72,10 +72,51 @@ that — happy-dom, for one, eagerly loads `<iframe src>`.
 
 Relying on the host parser being inert makes a security property depend on
 somebody else's correctness. So `<script>`, `<iframe>`, `<embed>`, `<link>`,
-`<base>` and friends are renamed to an inert custom element **in the source
-text**, before any DOM implementation acts on them, and removed with a
-diagnostic during the scrub. The rename applies to the working copy only;
+`<base>` and friends are removed **from the source text**, before any DOM
+implementation acts on them. The removal applies to the working copy only;
 `document.rawHtml` keeps the original bytes.
+
+They are *removed*, never renamed to an inert placeholder element. That
+distinction cost a real bug and is worth stating plainly:
+
+> `<link>` is a void element. A custom element by that name is not. Word puts
+> `<link rel=File-List ...>` in the head of every clipboard payload, so a
+> renamed `<link>` is hoisted into the body by a real browser, stays open,
+> swallows the entire document as its children, and is then removed along with
+> all of it. The symptom is a paste that yields zero paragraphs — silently,
+> because the payload "parsed successfully".
+
+Three rules follow, and each of them is a test:
+
+- **Void elements** (`link`, `base`, `embed`, `frame`) — only the tag is
+  removed. There are no children to lose.
+- **Raw-text elements** (`script`, `noscript`, `noframes`, `applet`) — tag and
+  contents both go; their contents are code, not document content. An unclosed
+  one runs to the end of the document, which is how the HTML tokenizer reads it
+  too.
+- **Containers** (`iframe`, `frameset`) — the element goes, its children stay.
+
+`<object>` is deliberately left alone: it loads nothing in an inert document,
+and it is how Word represents an embedded OLE object, so removing it would
+destroy the very thing the OLE diagnostic exists to report.
+
+The same reasoning governs the DOM scrub that runs afterwards: when it removes
+a forbidden element that slipped through, it unwraps the children first unless
+they are raw text. Deleting a subtree on the strength of an element name is how
+a whole paste disappears.
+
+One more detail worth recording, because it is easy to reintroduce. The
+attribute pattern is written so its alternatives cannot match the same text two
+ways:
+
+```
+[^>"']*(?:(?:"[^"]*"|'[^']*')[^>"']*)*
+```
+
+The obvious spelling, `(?:"[^"]*"|'[^']*'|[^>])*`, is ambiguous — `[^>]` also
+matches the characters inside a quoted value — and the engine explores
+exponentially many partitions of the same input. That turned a 1 ms parse into
+771 ms on a small fixture and hung the test suite outright on a large one.
 
 ## The model
 

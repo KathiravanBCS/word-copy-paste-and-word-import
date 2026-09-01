@@ -194,6 +194,12 @@
   "hyperlinks": [],
   "diagnostics": [
     {
+      "code": "SECURITY_EXTERNAL_RESOURCE",
+      "severity": "warning",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
       "code": "WORD_LIST_NUMBER_FORMAT_APPROXIMATED",
       "severity": "info",
       "fidelity": "EXACT",

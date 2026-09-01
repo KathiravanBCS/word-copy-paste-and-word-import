@@ -168,6 +168,12 @@
   "hyperlinks": [],
   "diagnostics": [
     {
+      "code": "SECURITY_EXTERNAL_RESOURCE",
+      "severity": "warning",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
       "code": "WORD_SYMBOL_FONT_MAPPED",
       "severity": "info",
       "fidelity": "EQUIVALENT",

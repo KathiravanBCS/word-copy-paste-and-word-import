@@ -133,6 +133,12 @@
   "hyperlinks": [],
   "diagnostics": [
     {
+      "code": "SECURITY_EXTERNAL_RESOURCE",
+      "severity": "warning",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    },
+    {
       "code": "WORD_NESTED_TABLE",
       "severity": "info",
       "fidelity": "EXACT",

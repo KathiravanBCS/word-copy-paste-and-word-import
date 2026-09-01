@@ -1,7 +1,7 @@
 # Testing
 
 ```bash
-npm test                      # everything — 215 tests
+npm test                      # everything — 217 tests
 npm run test:word             # parsing + regression only
 npm run test:golden           # the fixture suite
 npm run typecheck
@@ -75,11 +75,16 @@ written automatically on first run. For an existing one, a change is either a
 regression or an intentional behaviour change, and there is no third
 possibility — that is the entire value of the mechanism.
 
-Two of the engine's real bugs were found exactly this way. The
+Three of the engine's real bugs were found exactly this way. The
 `mso-bidi-font-weight` bug showed up as `"Bold" | [null]` in a re-blessed model
 diff: Word writes every bold run as `<b style='mso-bidi-font-weight:normal'>`,
 and reading that `normal` as the font weight had been silently un-bolding
 everything.
+
+The third was found by a user pasting a real document rather than by the suite,
+which is the honest version of the story: the fixtures were all *tidier* than a
+genuine Word payload, and the bug lived in exactly the gap between them. See
+**Head hoisting** below.
 
 ## Capturing a real Word payload
 
@@ -118,9 +123,16 @@ defer to the `<img>` twin, and the test suite therefore exercises the harder of
 the two paths.
 
 **Inert documents.** `DOMParser` documents do not load subresources in a
-browser. happy-dom's do. This is why executing elements are neutralised in the
+browser. happy-dom's do. This is why executing elements are removed from the
 source text before parsing rather than after — see
-[ARCHITECTURE.md](ARCHITECTURE.md#why-executing-elements-are-neutralised-in-the-text).
+[ARCHITECTURE.md](ARCHITECTURE.md#why-executing-elements-are-removed-from-the-text).
+
+**Head hoisting.** happy-dom and Chromium disagree about where an unknown
+element in `<head>` ends up, and that disagreement hid a bug that made real
+pastes come out empty. The fixtures now all carry the `<link rel=File-List>`
+and `<link rel=Edit-Time-Data>` elements Word puts in every payload, precisely
+so the suite exercises the case that broke. It is the clearest evidence there
+is that a fixture tidier than the real thing is not really a fixture.
 
 Because of the first point, native marker rendering cannot be verified under
 happy-dom — `::marker` is not implemented there. It was verified manually in

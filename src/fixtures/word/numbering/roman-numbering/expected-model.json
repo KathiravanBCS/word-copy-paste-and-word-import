@@ -104,5 +104,12 @@
   ],
   "images": [],
   "hyperlinks": [],
-  "diagnostics": []
+  "diagnostics": [
+    {
+      "code": "SECURITY_EXTERNAL_RESOURCE",
+      "severity": "warning",
+      "fidelity": "EQUIVALENT",
+      "count": 1
+    }
+  ]
 }

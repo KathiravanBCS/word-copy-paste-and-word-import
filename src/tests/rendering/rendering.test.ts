@@ -169,6 +169,57 @@ describe('security', () => {
     expect(document.rawHtml).toContain('<script>');
   });
 
+  /**
+   * The regression that mattered most.
+   *
+   * `<link>` is a void element. Word puts `<link rel=File-List …>` in the head
+   * of every clipboard payload. Neutralising it by *renaming* it to a custom
+   * element turns it into a non-void one: a real browser then hoists it into
+   * the body, leaves it open, and every subsequent element becomes its child.
+   * Removing it afterwards took the entire document with it, and a 162 kB
+   * paste produced zero paragraphs — silently, because nothing threw.
+   *
+   * happy-dom hoists it differently and did not reproduce this, which is
+   * exactly why the fixtures now carry the real Word head.
+   */
+  it('survives the <link> elements Word puts in every payload', () => {
+    const withLinks = `<html xmlns:o="urn:schemas-microsoft-com:office:office">
+      <meta name=ProgId content=Word.Document>
+      <meta name=Generator content="Microsoft Word 15 (filtered medium)">
+      <link rel=File-List href="file:///C:/Users/x/Temp/msohtmlclip1/01/clip_filelist.xml">
+      <link rel=Edit-Time-Data href="file:///C:/Users/x/Temp/msohtmlclip1/01/clip_editdata.mso">
+      <style><!-- p.MsoNormal {margin:0in;} --></style>
+      <body><div class=WordSection1><!--StartFragment-->
+      <p class=MsoNormal>First paragraph.<o:p></o:p></p>
+      <p class=MsoNormal>Second paragraph.<o:p></o:p></p>
+      <!--EndFragment--></div></body></html>`;
+
+    const document = parseWordHtmlString(withLinks);
+    expect(document.blocks).toHaveLength(2);
+    expect(renderWordDocument(document).html).toContain('First paragraph.');
+    expect(renderWordDocument(document).html).not.toContain('clip_filelist');
+  });
+
+  it('removes void elements from the text rather than renaming them', () => {
+    // A renamed void element becomes a container; deleting from the source
+    // text is the only handling that cannot swallow the document.
+    for (const tag of ['link', 'base', 'embed', 'frame']) {
+      const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office">
+        <meta name=ProgId content=Word.Document>
+        <style><!-- p.MsoNormal {margin:0in;} --></style>
+        <body><div class=WordSection1>
+        <${tag} href="https://evil.example" src="https://evil.example">
+        <p class=MsoNormal>Content after the ${tag}.</p>
+        </div></body></html>`;
+      const document = parseWordHtmlString(html);
+      const text = document.blocks
+        .map((b) => (b.type === 'paragraph' ? b.runs.map((r) => (r.type === 'text' ? r.text : '')).join('') : ''))
+        .join('');
+      expect(text, tag).toContain(`Content after the ${tag}.`);
+      expect(renderWordDocument(document).html, tag).not.toContain('evil.example');
+    }
+  });
+
   it('bounds a pathologically nested payload', () => {
     const deep = '<div>'.repeat(400) + '<p>deep</p>' + '</div>'.repeat(400);
     const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office">

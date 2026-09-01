@@ -189,7 +189,7 @@ standalone HTML, and exports whatever you pasted as a new fixture.
 ## Development
 
 ```bash
-npm test              # 215 tests
+npm test              # 217 tests
 npm run typecheck
 npm run lint
 npm run dev           # clipboard lab at :5180
