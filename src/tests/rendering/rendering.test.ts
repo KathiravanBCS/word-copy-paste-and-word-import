@@ -45,15 +45,20 @@ describe('list rendering', () => {
     expect(css).toContain('suffix: ". "');
   });
 
-  it('falls back to a real ::marker for a level text CSS cannot express, in native mode', () => {
-    const { html, css } = renderWordDocument(byId('numbering/multilevel-numbering'), {
+  it('falls back to an element marker for a level text CSS cannot express, even in native mode', () => {
+    const { html } = renderWordDocument(byId('numbering/multilevel-numbering'), {
       markerMode: 'native',
     });
-    // `%1.%2` has no counter-style equivalent, so the literal marker is put on
-    // the item and drawn by ::marker — still a marker, never text.
-    expect(html).toContain('data-marker="1.1"');
-    expect(css).toContain('::marker');
-    expect(css).toContain('content: attr(data-marker)');
+    // `%1.%2` has no counter-style equivalent. A `::marker { content:
+    // attr(data-marker) }` fallback was tried and dropped: a real editor's
+    // content model (RoosterJS, verified directly) does not keep a
+    // non-standard `data-marker` attribute across its own DOM round-trip, so
+    // the marker silently disappeared. `element` rendering needs only the
+    // inline `style` this engine already sets, which survives — still a
+    // marker, never text, just not the pseudo-element this level can't
+    // reliably have under `native` mode's own constraints.
+    expect(html).toContain('<span class="wce-marker" contenteditable="false" aria-hidden="true">1.1</span>');
+    expect(html).not.toContain('data-marker');
     expect(html).not.toMatch(/>1\.1\s*Orbis/);
   });
 

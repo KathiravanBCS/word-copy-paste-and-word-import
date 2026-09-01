@@ -183,11 +183,13 @@ Fidelity: EXACT 2, EQUIVALENT 3, APPROXIMATED 0, UNSUPPORTED 0
 
 The core stays editor-agnostic — zero runtime dependencies, nothing in
 `src/index.ts` imports any editor. But the whole point of the model is to be
-useful *inside* one, and that has its own two problems a static render
-doesn't: a marker sitting in live editable content can be typed into or
-corrupted by Backspace, and most non-trivial editors convert whatever you
-paste into their own internal document model, discarding anything that model
-doesn't represent.
+useful *inside* one, and that has its own problems a static render doesn't: a
+marker sitting in live editable content can be typed into or corrupted by
+Backspace; most non-trivial editors convert whatever you paste into their own
+internal document model, discarding anything that model doesn't represent;
+and a static marker span doesn't let the editor's own list-continuation logic
+take over — pressing Enter at the end of a pasted list should produce the
+next number or bullet automatically, the way it does in Word.
 
 Both are fixed and demonstrated with a real
 [RoosterJS](https://microsoft.github.io/roosterjs) editor:

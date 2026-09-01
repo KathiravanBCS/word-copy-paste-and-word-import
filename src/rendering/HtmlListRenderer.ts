@@ -16,19 +16,34 @@ import { roundTo } from '../word/WordLengthParser.js';
  *
  * Two rendering modes, both of which keep that separation:
  *
- *   `native`  (default)
+ *   `native`
  *       Real `<ul>`/`<ol>` with real browser markers. Word's numbering
  *       definition is compiled into a generated `@counter-style` rule, so a
  *       Word upper-roman level with a `.` suffix becomes an actual
  *       `list-style-type` and the browser draws it. Numbers carry `value` so
- *       the count is exact even across continuations. Level texts that CSS
- *       counter styles cannot express — `%1.%2` and friends — fall back to
- *       `::marker { content: … }`, which is still a real marker.
+ *       the count is exact even across continuations, and because it is a
+ *       real `<ol>`, a live editor's own list-continuation logic can extend
+ *       it — press Enter at the end of an item and the next number is the
+ *       browser's, not this engine's.
  *
- *   `element`
+ *       Level texts CSS counter styles cannot express — `%1.%2` and friends —
+ *       fall back to `element` rendering for that level (below), not to
+ *       `::marker { content: attr(data-marker) }`. That was tried and
+ *       measured against a real editor's content model (RoosterJS): the
+ *       `data-marker` attribute it depends on does not survive the round trip
+ *       — dropped the same way an external stylesheet's classes are — so the
+ *       marker silently vanished. There was never a way to auto-continue a
+ *       composite counter like "1.1" with a single CSS counter-style anyway,
+ *       so falling back costs nothing `native` mode could actually deliver
+ *       for that case.
+ *
+ *   `element`  (default)
  *       `list-style: none` plus an explicit `<span class="wce-marker">`. Less
- *       native, but reproduces Word's hanging-indent geometry exactly and
- *       survives environments that strip `::marker` styling.
+ *       native, but reproduces Word's hanging-indent geometry exactly, and
+ *       depends on nothing but the inline `style` this engine already puts on
+ *       the element — which is what survives environments (rich-text editors
+ *       especially) that strip `::marker` styling, CSS classes, and
+ *       non-standard attributes alike.
  *
  * What neither mode ever does is re-interpret the numbering. If the model says
  * upper-roman with level text `%1.`, the output says `I.`; if it says `%1.%2`,
@@ -91,10 +106,7 @@ const CSS_COUNTER_SYSTEM: Partial<Record<WordNumberFormat, string>> = {
 } as Partial<Record<WordNumberFormat, string>>;
 
 /** How a level's marker will be produced. */
-type MarkerStrategy =
-  | { kind: 'counter-style'; name: string }
-  | { kind: 'marker-content' }
-  | { kind: 'element' };
+type MarkerStrategy = { kind: 'counter-style'; name: string } | { kind: 'element' };
 
 export interface ListLevelStyle {
   /** CSS class applied to the `<ol>`/`<ul>`. */
@@ -158,10 +170,25 @@ export function compileLevelStyle(
       ]);
       strategy = { kind: 'counter-style', name };
     } else {
-      // A multi-level level text such as `%1.%2`, or a Word number format with
-      // no CSS counter-style equivalent. The literal marker Word produced is
-      // put on the item and drawn by ::marker, so it is still a real marker.
-      strategy = { kind: 'marker-content' };
+      // A multi-level level text such as `%1.%2`, or a Word number format
+      // with no CSS counter-style equivalent. `::marker { content:
+      // attr(data-marker) }` can draw this without ever putting the marker
+      // in the text flow — but only when whatever receives the HTML keeps
+      // that `data-marker` attribute on the `<li>`. Verified directly against
+      // a real editor's content model (RoosterJS): it does not — attributes
+      // it does not itself recognise are dropped when pasted content is
+      // converted to the editor's own model, same as it drops CSS classes
+      // (see the `element`-mode block above). A marker that depends on an
+      // attribute surviving an arbitrary consumer is not durable enough to
+      // call "the native option", so this falls back to the same `element`
+      // rendering non-native mode uses: a real, protectable span that only
+      // needs its inline `style` preserved, which is far more commonly kept
+      // intact than an arbitrary `data-*` attribute. It costs the
+      // auto-continuation `native` mode exists for, but only for the
+      // composite levels that could never really have it anyway — a
+      // "1.1"-shaped counter cannot be a single CSS counter-style, so there
+      // was never a real browser-native mechanism to auto-continue it with.
+      strategy = { kind: 'element' };
     }
   }
 
@@ -201,13 +228,6 @@ export function compileLevelStyle(
         `  display: inline-block;`,
         `  min-width: ${hangingPx}px;`,
         `  text-indent: 0;`,
-        ...(needsFont && markerFont ? [`  font-family: ${quoteFontStack(markerFont)};`] : []),
-        `}`,
-      );
-    } else if (strategy.kind === 'marker-content') {
-      rules.push(
-        `${itemSelector}::marker {`,
-        `  content: attr(data-marker) " ";`,
         ...(needsFont && markerFont ? [`  font-family: ${quoteFontStack(markerFont)};`] : []),
         `}`,
       );
@@ -266,9 +286,6 @@ export function renderListItemAttributes(
   if (item.marker.type === 'number' && strategy.kind === 'counter-style') {
     const value = numericValue(item);
     if (value !== undefined) parts.push(` value="${value}"`);
-  }
-  if (strategy.kind === 'marker-content' && item.marker.text) {
-    parts.push(` data-marker="${escapeHtmlAttribute(item.marker.text)}"`);
   }
   if (options.includeWordMetadata) {
     parts.push(` data-word-list="${escapeHtmlAttribute(item.listId)}"`);

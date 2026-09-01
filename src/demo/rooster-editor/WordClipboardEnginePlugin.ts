@@ -68,14 +68,28 @@ export class WordClipboardEnginePlugin implements EditorPlugin {
       // Named to avoid shadowing the global `document` — this is a parsed
       // WordDocument model, not a DOM Document.
       const wordDocument = parseWordClipboard(clipboardPayloadFromHtml(rawHtml));
-      // 'element' markers (the engine's default) are what make this safe to
-      // drop into a *live* editable surface: the marker is a real element
-      // with contenteditable="false" on it, so typing or backspacing next to
-      // a bullet can delete the marker as a whole but can never partially
-      // corrupt it into "· becomes -" or "1.1.1 becomes 1.1." the way a bare
-      // text-node glyph could. Verified directly against Chromium's actual
-      // editing behaviour — see docs/RICH-TEXT-EDITOR.md.
-      const rendered = renderWordDocument(wordDocument, { markerMode: 'element', includeWordMetadata: false });
+      // 'native' markers here, not the library's own default ('element'):
+      // this editor needs a real <ol>/<li> with a real browser ::marker, not
+      // a text span glued to the paragraph, because only a real list is
+      // something RoosterJS's own list-continuation logic understands — press
+      // Enter at the end of an item and RoosterJS inserts the next <li>,
+      // which the browser numbers on its own. An 'element' marker is baked-in
+      // text: RoosterJS has no way to know "insert the next number here",
+      // because there is no next number in its model, just a span someone
+      // wrote once and never renders again.
+      //
+      // This also sidesteps the corruption risk 'element' mode needed
+      // contenteditable="false" for in the first place: a native ::marker is
+      // drawn by the browser outside the editable content entirely — there is
+      // no DOM node inside the editable flow for a stray keystroke to land in
+      // or a Backspace to eat character-by-character.
+      //
+      // The tradeoff (see HtmlRenderer.ts) is Word's exact gutter spacing:
+      // 'native' markers are right-aligned in their gutter with no visible
+      // gap ("1. Saji George"), where 'element' reproduces Word's actual
+      // tab-stop gap ("1.1.1    Saji George"). Auto-continuing numbers in a
+      // live editor is the feature being traded for here.
+      const rendered = renderWordDocument(wordDocument, { markerMode: 'native', includeWordMetadata: false });
       html = rendered.html;
       // The generated marker/list geometry CSS is per-document, not per-node,
       // so it is installed once here rather than threaded through the

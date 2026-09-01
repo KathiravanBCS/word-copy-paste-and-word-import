@@ -126,10 +126,12 @@ describe('acceptance criteria', () => {
     // Default (element) mode: the literal marker Word computed is the visible
     // text of the marker span.
     expect(html).toContain('>1.1</span>');
-    // Native mode: the same literal text drives a real ::marker via
-    // data-marker, since %1.%2 has no CSS counter-style equivalent.
+    // Native mode: %1.%2 has no CSS counter-style equivalent, and falls back
+    // to the same element marker rather than a data-marker-driven ::marker
+    // (which does not survive a real editor's content model — see
+    // HtmlListRenderer.ts). The literal text is still never rewritten.
     const native = renderWordDocument(document, { markerMode: 'native' }).html;
-    expect(native).toContain('data-marker="1.1"');
+    expect(native).toContain('>1.1</span>');
   });
 
   it('6. Word list start values are preserved', () => {

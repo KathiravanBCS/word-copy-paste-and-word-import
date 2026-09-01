@@ -242,17 +242,28 @@ drew, so a list copied from the middle of a document numbers from where it
 really started rather than from 1.
 
 A level text CSS counter styles cannot express — `%1.%2`, or a Word format with
-no CSS equivalent such as `ordinal-text` — falls back to a real `::marker`:
+no CSS equivalent such as `ordinal-text` — falls back to `element` rendering
+for that level instead of `native`'s usual counter-style:
 
 ```html
-<li data-marker="1.1">Orbis India</li>
-```
-```css
-.wce-3 > li::marker { content: attr(data-marker) " "; }
+<li style="padding-left:24px;text-indent:-24px">
+  <span class="wce-marker" contenteditable="false" aria-hidden="true">1.1</span>Orbis India
+</li>
 ```
 
-Still a marker, still not text. Verified in Chromium: the computed `::marker`
-content resolves to `"1.1 "`.
+An earlier version of this fallback used a real `::marker { content:
+attr(data-marker) " " }`, reading the literal marker text off a `data-marker`
+attribute — technically still native. It does not survive a real editor:
+verified directly against RoosterJS, the `data-marker` attribute is dropped
+when pasted content is converted into the editor's own model, the same way an
+external stylesheet's classes are (§ this document, `element` vs `native`
+above) — so the marker silently vanished after paste, with nothing left in
+its place. `element` rendering needs only the inline `style` this engine
+already sets on the span, which is what actually survives that round trip.
+There was no real loss in trading this: a composite counter like "1.1" was
+never expressible as a single CSS counter-style, so `native` mode was never
+going to auto-continue it either way — the fallback gives up nothing `native`
+could actually deliver for this case.
 
 Where the glyph could not be mapped to Unicode, the marker keeps its original
 font:
