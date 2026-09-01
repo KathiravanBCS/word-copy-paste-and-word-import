@@ -23,20 +23,41 @@ has to deal with:
    moment that conversion happens, whether or not it "looked fine" the
    instant it landed.
 
-Both are demonstrated, fixed, and verified below using
-[RoosterJS](https://microsoft.github.io/roosterjs) — Microsoft's own
-content-model-based editor, and a deliberately unforgiving choice for this,
-since it does the most re-deriving of any mainstream option.
+A third requirement followed once someone actually used an editor built this
+way: real, auto-continuing markers — pressing Enter at the end of a list item
+should continue the numbering the way Word, and every other editor, does
+natively, not leave a blank unmarked line.
 
-A third requirement followed once someone actually used the editor: real
-`<ol>`/`<ul>` markers, not this engine's usual `element` spans, so that
-pressing Enter at the end of a list item continues the numbering the way
-Word — and every other editor — does natively. That is a different rendering
-mode entirely (`markerMode: 'native'`, see
-[LIST-PARSING.md § 6](LIST-PARSING.md#6-rendering-the-marker)), and switching
-to it surfaced its own RoosterJS-specific bug, covered in § 3 below.
+Two integrations demonstrate, fix, and verify all three, against two
+editors chosen for how differently they're built:
 
-## Try it
+- **[RoosterJS](#roosterjs-integration)** — Microsoft's own
+  content-model-based editor. It converts whatever you give it into a fixed
+  internal model with no field for Word-specific numbering data, so getting
+  it right takes real work: a rendering-mode choice, one library-level fix,
+  and a JS layer this document explains in full — because that is what
+  integrating with a *closed* editor model actually costs, honestly shown
+  rather than glossed over.
+- **[TipTap](#tiptap-integration)** (ProseMirror) — an editor where *you*
+  define the schema. Given a real node type for a Word list item, none of
+  RoosterJS's workarounds are needed at all: the schema itself has the field
+  RoosterJS's didn't, and every Word number format auto-continues correctly,
+  not just decimal chains.
+
+Read the RoosterJS section for what a closed content model costs and how far
+workarounds can close the gap; read the TipTap section for what removes the
+gap entirely. If you're integrating with your own editor, jump to
+[Building your own adapter](#building-your-own-adapter) — it names which
+path fits which kind of editor.
+
+## RoosterJS integration
+
+That closed content model is also what makes RoosterJS a deliberately
+unforgiving choice to verify against — it does the most re-deriving of any
+mainstream editor, so whatever survives it is a real result, not a lucky
+default.
+
+### Try it
 
 ```bash
 npm run dev
@@ -60,7 +81,7 @@ demonstrate:
 - Click right before any marker and press Backspace — the whole marker still
   comes out as one unit, never one corrupted character at a time.
 
-## 1. Protecting the marker: `contenteditable="false"`
+### 1. Protecting the marker: `contenteditable="false"`
 
 `element`-mode markers carry it:
 
@@ -101,7 +122,7 @@ for a stray keystroke to land in. This attribute still matters for the levels
 `native` mode itself falls back to `element` for (composite formats like
 "1.1" — § 3), which is the case actually pictured above.
 
-## 2. Making the geometry survive RoosterJS's content model: inline everything
+### 2. Making the geometry survive RoosterJS's content model: inline everything
 
 This one took an actual empirical isolation to find, because the first
 attempt looked like it worked and didn't.
@@ -142,7 +163,7 @@ With that in place, the same multilevel list pastes with the correct,
 Word-matching structure and no duplicate numbering — verified end to end
 against the real integration, not a synthetic case.
 
-## 3. Real `<ol>`/`<ul>` markers, so the numbering auto-continues
+### 3. Real `<ol>`/`<ul>` markers, so the numbering auto-continues
 
 This engine's own default output uses `element` markers (§ 1) — a span with
 the literal marker text, positioned to match Word's exact gutter. That is the
@@ -205,7 +226,7 @@ simple roman numbering (I., II., …) and the second level is composite ("1.1",
 time and never vanish, exactly matching what the engine's own renderer
 produced before RoosterJS ever saw it.
 
-## 4. Auto-continuing composite markers too, in JS
+### 4. Auto-continuing composite markers too, in JS
 
 § 3 leaves one thing genuinely undone: a composite marker's *text* survives
 now, but it does not renumber itself the way a real `::marker` does. Press
@@ -266,7 +287,7 @@ in the document from 1 at each level — a paste that started mid-document at
 else. Preserving that offset indefinitely would need the same Word-level
 metadata § 3 already established does not survive RoosterJS's round trip.
 
-## 5. A limitation this integration has, honestly
+### 5. A limitation this integration has, honestly
 
 Word content the engine cannot resolve to a real image (a `file:///` path
 with no clipboard bytes to recover) renders as a labelled placeholder — a
@@ -293,12 +314,149 @@ principled fix is RoosterJS's **Entity** API (a way to mark a subtree as
 opaque, editor-managed content RoosterJS won't try to re-derive formatting
 for), which is a real, separate integration this file does not yet cover.
 
+## TipTap integration
+
+RoosterJS's every workaround above exists because its Content Model is
+*fixed*: a curated set of properties the editor already knows about, with no
+field for "this marker is `%1.%2`, decimal, decimal" — nowhere to put it, no
+matter how the plugin tries to hand it over. TipTap ([tiptap.dev][tiptap]) is
+built on ProseMirror, where the schema is *yours*. Give it a real node type
+for a Word list item, and the field simply exists — nothing needs recovering
+after the fact, because nothing was ever going to be thrown away.
+
+[tiptap]: https://tiptap.dev
+
+### Try it
+
+```bash
+npm run dev
+```
+
+Open `/tiptap-editor/`. Paste real Word content, or use **Paste a fixture**.
+Press Enter at the end of *any* numbered or bulleted item — including a
+composite level like "1.1" or "1.1.1" — and the next one is numbered
+correctly **immediately**. No delay, no caret-tracking workaround: unlike the
+RoosterJS integration's § 4, there is nothing here that needs one.
+
+### The schema: `wordList` and `wordListItem`
+
+Two node types, defined in
+[`src/demo/tiptap-editor/WordListNodes.ts`](../src/demo/tiptap-editor/WordListNodes.ts),
+mirror `HtmlRenderer.ts`'s own `<ol>`/`<li>` nesting shape. `wordListItem`
+carries Word's numbering *declaration* as node attributes — `levelText`
+(`"%1.%2"`), `numberFormat` (`decimal`, `upper-roman`, …), the list's
+`startAt` — captured straight off the `data-word-*` attributes this engine's
+renderer already emits with `includeWordMetadata: true`. No new rendering
+mode was needed in the core library for this: `element` marker mode already
+carries everything, because a plain HTML attribute is something ProseMirror's
+own `DOMParser` reads directly into node attrs, by a rule this file writes
+itself — nothing is filtered through an editor's own idea of which properties
+matter, the way RoosterJS's Content Model conversion filters everything.
+
+A marker is never stored as text. A ProseMirror plugin
+(`wordListMarkerPlugin`) draws it as a `Decoration.widget`, recomputed fresh
+from live document position on every read, using this engine's own
+`expandLevelText`/`formatNumber` (`WordListStyleParser.ts`, already public
+API) — the exact functions the static renderer uses to cross-check Word's own
+marker text. The 2nd sub-item of the 1st item is structurally `[1, 2]`; feed
+that through the item's declared format and level text, and the marker is
+correct for *any* Word number format — roman, alpha, ordinal, any mix at any
+depth — not just decimal composites, because nothing here treats decimal as
+special the way the RoosterJS integration's JS-side regex had to.
+
+A widget decoration also means the marker was never part of the document's
+editable text in the first place — not protected by an attribute the way
+RoosterJS's markers need `contenteditable="false"` (§ 1 above), just
+structurally impossible to land a cursor inside or eat with Backspace one
+character at a time. Backspace at the very start of an item's text merges it
+into the previous item — ProseMirror's ordinary block-join behaviour,
+requiring no special handling — which is closer to Word's own UX than either
+of RoosterJS's marker-removal behaviours turned out to need to be.
+
+### Three bugs this surfaced, one of them in the core library
+
+**Pasting dropped the outermost list.** The first working version pasted a
+multilevel list with every item at the top level rendered as a bare
+paragraph — no marker, no `<ol>` — while a *nested* list further inside the
+same paste came through fine. Isolated directly by dumping
+`editor.getJSON()`: `DOMParser.parseSlice()`, the usual choice for pasted
+content, computes `openStart`/`openEnd` from how deep the first and last leaf
+sit and trims wrapping nodes at those edges — correct, wanted behaviour for
+merging a paste into existing content, wrong for this handler, which wants
+the structure inserted exactly as rendered. Fixed by parsing as a complete,
+self-contained document (`parser.parse(root)`) and wrapping its content in a
+`Slice` built with `openStart`/`openEnd` both `0`, in
+[`WordClipboardExtension.ts`](../src/demo/tiptap-editor/WordClipboardExtension.ts) —
+no trimming assumed.
+
+**Pressing Enter added a paragraph, not a new item.** `wordListItem.content`
+allows more than one paragraph (`paragraph+`, for the rare genuinely
+multi-paragraph list item), so ProseMirror's default Enter handling
+(`splitBlock`) just split the *paragraph*, leaving the typed text inside the
+same item — no new marker anywhere, because no new item was ever created.
+Fixed with `prosemirror-schema-list`'s own `splitListItem` command, bound to
+Enter in `WordListNodes.ts` — the standard mechanism every list
+implementation on ProseMirror uses for this, not something specific to this
+schema.
+
+**A composite marker's ancestor digit used the wrong format — a real,
+previously-hidden bug, not a TipTap-specific one.** Given a roman level 0
+("I.") and a decimal-declared level 1 whose level text is `"%1.%2"`, the
+first version computed `"I.1"`. The correct, Word-verified answer is
+`"1.1"`: a composite level text's *own* format governs **every** placeholder
+it contains, including ones naming an ancestor's counter — `%1` here does not
+mean "show the ancestor the way it shows itself," it means "show the
+ancestor's current count, in the format *this* level declared." This
+integration's live marker computation has no Word-rendered text to fall back
+on for a freshly typed item, so getting the format actually right (not just
+plausible) mattered immediately — and tracing it back found the exact same
+bug already latent in `NormalizeLists.ts`'s own fallback computation (used
+when Word omits the marker entirely, e.g. content pasted from Word Online).
+It was invisible until now only because that fallback is a diagnostic
+cross-check, not the displayed text, whenever Word's own literal marker is
+present — which every existing fixture's payload does provide. Fixed in both
+places; see the `NormalizeLists.ts` comment at the same spot for the core-library
+side, and [LIST-PARSING.md](LIST-PARSING.md) for how a composite level text is
+otherwise handled.
+
+### What's not (yet) ported
+
+Lists get this integration's full, custom treatment; paragraphs, tables,
+images, and character formatting (bold/italic/underline/strikethrough) go
+through TipTap's own default schema and `DOMParser`, unmodified — verified
+directly, a pasted table and character formatting both survive intact. Two
+things a from-scratch TipTap setup would also need, not wired into this demo
+specifically: colour/highlight/font-family marks (`TextStyle`/`Color`/
+`Highlight`/`FontFamily` extensions this demo doesn't install), and the same
+placeholder-styling gap § 5 above describes for RoosterJS — an unresolved
+image still never becomes a broken `file:///` reference, it just isn't
+wrapped as richly as the static renderer's dashed-border box. Neither is a
+limitation of the *approach* — both are additional TipTap extensions or
+schema work this demo scoped out, not a wall the way RoosterJS's Content
+Model was.
+
 ## Building your own adapter
 
-The whole integration is one file,
+Which pattern to follow depends on what your editor lets you define:
+
+- **Your editor lets you register a custom node/schema type** (ProseMirror —
+  TipTap, Lexical's node system, or similar) — follow the **TipTap**
+  integration's shape: a real node for a Word list item, attributes for its
+  numbering declaration, and a decoration/plugin that draws the marker fresh
+  from live position. This is the one that actually removes the problem,
+  not just works around it, and it isn't ProseMirror-specific in spirit —
+  only in which APIs (`Node.create`, `Decoration.widget`) it uses.
+- **Your editor has a fixed content model you cannot extend** (RoosterJS, or
+  anything similarly closed) — follow the **RoosterJS** integration's shape
+  below: render with this engine's own marker geometry, inline the generated
+  CSS, and accept that composite (non-decimal-counter) markers need a JS
+  layer to auto-continue, because there is nowhere in the editor's model to
+  put a declaration it could read back later.
+
+The RoosterJS integration is one file,
 [`src/demo/rooster-editor/WordClipboardEnginePlugin.ts`](../src/demo/rooster-editor/WordClipboardEnginePlugin.ts),
 and none of it is RoosterJS-specific in spirit — only in which hook it uses.
-The shape any editor's adapter needs is the same:
+The shape any *closed-model* editor's adapter needs is the same:
 
 1. **Find the editor's own pre-insertion hook.** RoosterJS calls it
    `BeforePasteEvent`; look for the equivalent — a point where the editor
@@ -323,8 +481,18 @@ The shape any editor's adapter needs is the same:
    assuming, given what section 2 above found.
 5. **Replace the target's insertion point with the rendered content.**
 
+For an extensible-schema editor, the equivalent shape is
+[`src/demo/tiptap-editor/WordClipboardExtension.ts`](../src/demo/tiptap-editor/WordClipboardExtension.ts)
+(the paste handler) and
+[`WordListNodes.ts`](../src/demo/tiptap-editor/WordListNodes.ts) (the schema
+and live marker computation) — read the raw clipboard HTML from the editor's
+own pre-insertion hook exactly as above, render with `element` marker mode
+and `includeWordMetadata: true` so the HTML carries a numbering declaration
+your schema's `parseHTML` can read, then parse straight into your schema
+instead of handing the editor a DOM fragment to interpret on its own.
+
 None of this requires `word-clipboard-engine` to know anything about
-RoosterJS, or about whatever editor you're integrating with — the model and
+RoosterJS, TipTap, or whatever editor you're integrating with — the model and
 renderer stay exactly as editor-agnostic as
 [ARCHITECTURE.md](ARCHITECTURE.md) describes. The adapter is where the
 editor-specific knowledge belongs, and it can live entirely outside this

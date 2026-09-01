@@ -16,6 +16,7 @@ export default defineConfig({
         index: resolve(__dirname, 'src/demo/index.html'),
         lab: resolve(__dirname, 'src/demo/clipboard-lab/index.html'),
         rooster: resolve(__dirname, 'src/demo/rooster-editor/index.html'),
+        tiptap: resolve(__dirname, 'src/demo/tiptap-editor/index.html'),
       },
     },
   },

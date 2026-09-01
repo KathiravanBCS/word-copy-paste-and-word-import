@@ -191,18 +191,28 @@ and a static marker span doesn't let the editor's own list-continuation logic
 take over — pressing Enter at the end of a pasted list should produce the
 next number or bullet automatically, the way it does in Word.
 
-Both are fixed and demonstrated with a real
-[RoosterJS](https://microsoft.github.io/roosterjs) editor:
+All of it is fixed and demonstrated against two real editors, chosen for how
+differently they're built:
 
 ```bash
-npm run dev   # open /rooster-editor/
+npm run dev   # open /rooster-editor/ or /tiptap-editor/
 ```
 
-One additional plugin (`WordClipboardEnginePlugin`, ~150 lines) is the entire
-integration; `createEditor()` itself is unmodified RoosterJS. See
-[docs/RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) for what it took to make
-it hold up — verified in Chromium, not assumed — and for the pattern to reuse
-against any other editor.
+**[RoosterJS](https://microsoft.github.io/roosterjs)** — one plugin
+(`WordClipboardEnginePlugin`) is the entire integration; `createEditor()`
+itself is unmodified. RoosterJS converts everything into its own fixed
+content model, so simple numbers/bullets get real browser auto-continuation
+but composite numbering ("1.1", "1.1.1") needs a JS layer to renumber itself.
+
+**[TipTap](https://tiptap.dev)** (ProseMirror) — two custom node types give
+the schema itself a slot for Word's numbering declaration, so every format —
+composite or not — auto-continues natively, immediately, no JS workaround.
+This is the integration to model your own on if your editor lets you define
+custom nodes.
+
+See [docs/RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) for what it took to
+make each hold up — verified in Chromium, not assumed — and for which pattern
+fits your own editor.
 
 ## Clipboard Lab
 
@@ -237,7 +247,7 @@ UPDATE_FIXTURES=1 npm test   # re-bless golden fixtures (read the diff first)
 | [WORD-CLIPBOARD.md](docs/WORD-CLIPBOARD.md) | what Word actually puts on the clipboard, in detail |
 | [LIST-PARSING.md](docs/LIST-PARSING.md) | the hardest part: markers, numbering, identity, indentation |
 | [FIDELITY.md](docs/FIDELITY.md) | every diagnostic code and what it means |
-| [RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) | using this inside a live editor — marker protection, why CSS must be inlined, the RoosterJS integration |
+| [RICH-TEXT-EDITOR.md](docs/RICH-TEXT-EDITOR.md) | using this inside a live editor — the RoosterJS integration (a closed content model, workaround by workaround) and the TipTap integration (a custom schema, the problem removed rather than worked around) |
 | [TESTING.md](docs/TESTING.md) | fixtures, golden tests, and capturing a real Word payload |
 
 ## Licence

@@ -31,8 +31,6 @@ interface ListRunState {
   instanceId: string;
   /** Counter value per level; `undefined` means "not started at this level". */
   counters: Array<number | undefined>;
-  /** Number format per level, for expanding multi-level level texts. */
-  formats: WordNumberFormat[];
   /** True once the run has been interrupted and resumed. */
   continued: boolean;
 }
@@ -72,7 +70,6 @@ export function normalizeLists(
           run = {
             instanceId: nextInstanceId(`${item.listId}${item.lfo ? `-${item.lfo}` : ''}`),
             counters: [],
-            formats: [],
             continued: false,
           };
           runs.set(key, run);
@@ -124,7 +121,6 @@ function applyCounters(
   const definition = item.levelDefinition;
   const format: WordNumberFormat =
     definition?.numberFormat ?? item.marker.numberFormat ?? 'decimal';
-  run.formats[level] = format;
 
   if (item.marker.type === 'bullet' || item.marker.type === 'none') {
     // Bullets do not count, but entering a bullet level still resets the
@@ -148,7 +144,21 @@ function applyCounters(
   truncateBelow(run.counters, level);
 
   const counters = run.counters.slice(0, level + 1).map((c) => c ?? 1);
-  const formats = run.formats.slice(0, level + 1).map((f) => f ?? 'decimal');
+  // A composite level text's *own* number format applies to every
+  // placeholder it contains, including ones naming an ancestor level — not
+  // each ancestor's own independent format. A roman-numbered level 0 ("I.")
+  // followed by a decimal-formatted level 1 whose level text is "%1.%2"
+  // renders "1.1" in Word, not "I.1": level 1's own `decimal` format governs
+  // both digits, because `%1` here does not mean "show the ancestor the way
+  // it shows itself", it means "show the ancestor's current count, in the
+  // format *this* level declared". So the same format is used for every
+  // position in `counters`, not a chain of each level's own — verified
+  // directly against a real Word document, while building the TipTap
+  // integration's own marker computation (`src/demo/tiptap-editor/
+  // WordListNodes.ts`), which has no Word-rendered text to fall back on for
+  // a newly typed item and so needed this to be actually correct, not just
+  // a diagnostic-only fallback the way it is here (below).
+  const formats: WordNumberFormat[] = new Array(counters.length).fill(format);
 
   const levelText = definition?.levelText ?? item.marker.levelText;
   const computed = levelText

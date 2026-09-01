@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2713%27 font-size=%2713%27%3E%E2%97%8F%3C/text%3E%3C/svg%3E"
+    />
+    <title>TipTap Integration — Word Clipboard Engine</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .tiptap-host {
+        max-width: 760px;
+        margin: 16px auto;
+        padding: 0 16px;
+      }
+      #tiptap-editor {
+        min-height: 360px;
+        background: #fff;
+        border: 1px solid var(--border, #e2e2e5);
+        border-radius: 6px;
+        outline: none;
+      }
+      #tiptap-editor:focus-within {
+        border-color: var(--accent, #2563eb);
+      }
+      #tiptap-editor .ProseMirror {
+        min-height: 360px;
+        padding: 0.6in 0.75in;
+        font-family: Calibri, "Segoe UI", system-ui, sans-serif;
+        font-size: 11pt;
+        line-height: 1.35;
+        outline: none;
+      }
+      #tiptap-editor img {
+        max-width: 100%;
+        height: auto;
+      }
+      #tiptap-editor table {
+        border-collapse: collapse;
+      }
+      #tiptap-editor li.wce-list-item {
+        list-style: none;
+      }
+      /* The paragraph spacing this engine renders (padding, never margin —
+         see docs/ARCHITECTURE.md on why margin collapse was the bug) lives
+         on the <li> itself via its inlined `style`; a bare <p>'s own
+         browser-default margin would double it. */
+      #tiptap-editor li.wce-list-item > p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <h1>TipTap Integration</h1>
+        <p>
+          A live, editable TipTap (ProseMirror) surface with a real Word list node in its
+          schema, not a workaround bolted onto someone else's.
+        </p>
+      </div>
+      <nav class="app-nav">
+        <a href="../">Fixture gallery</a>
+        <a href="../clipboard-lab/">Clipboard Lab</a>
+        <a href="../rooster-editor/">RoosterJS Integration</a>
+      </nav>
+    </header>
+
+    <main class="tiptap-host">
+      <p class="note">
+        This is a real <a href="https://tiptap.dev" target="_blank" rel="noreferrer noopener"
+          >TipTap</a
+        >/ProseMirror editor. Two custom node types, <code>wordList</code> and
+        <code>wordListItem</code> (<code>WordListNodes.ts</code>), give the schema itself a slot
+        for Word's numbering declaration — level format, level text, list identity — so a
+        marker's text is always <em>computed</em> from live document position, in any Word
+        number format (roman, alpha, ordinal, any composite mix), not read once and left static.
+        <code>WordClipboardExtension.ts</code> is the paste handler.
+      </p>
+      <p class="note">
+        Paste real content from Microsoft Word below, or use <strong>Paste a fixture</strong> to
+        simulate one. Press Enter at the end of <em>any</em> numbered or bulleted item —
+        including a composite level like "1.1" or "1.1.1" — and the next one is numbered
+        correctly immediately, no delay, no workaround: see
+        <a href="../../../docs/RICH-TEXT-EDITOR.md">docs/RICH-TEXT-EDITOR.md</a> for how this
+        differs from the RoosterJS integration.
+      </p>
+
+      <div class="paste-actions" style="margin-bottom: 10px">
+        <select id="fixture-picker" class="select" aria-label="Paste a fixture">
+          <option value="">Paste a fixture…</option>
+        </select>
+        <button id="clear-editor" type="button" class="button button-quiet">Clear editor</button>
+        <span id="status" class="pill" style="margin-left: auto"></span>
+      </div>
+
+      <div id="tiptap-editor"></div>
+    </main>
+
+    <footer class="app-footer">
+      <span>word-clipboard-engine + tiptap</span>
+      <span id="footer-status">idle</span>
+    </footer>
+
+    <script type="module" src="./editor.ts"></script>
+  </body>
+</html>
