@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clipboard Lab — Word Clipboard Engine</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2713%27 font-size=%2713%27%3E%E2%97%8F%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <h1>Clipboard Lab</h1>
+        <p>Paste from Microsoft Word and inspect every stage of the conversion.</p>
+      </div>
+      <nav class="app-nav">
+        <a href="../">Fixture gallery</a>
+        <a
+          href="https://github.com/KathiravanBCS/word-copy-paste-and-word-import"
+          rel="noreferrer noopener"
+          target="_blank"
+          >Source</a
+        >
+      </nav>
+    </header>
+
+    <section class="paste-zone">
+      <div
+        id="paste-target"
+        class="paste-target"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Paste Word content here"
+        spellcheck="false"
+      >
+        <p class="paste-hint">
+          Copy content in Microsoft Word, click here, and press
+          <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>V</kbd>.
+        </p>
+      </div>
+      <div class="paste-actions">
+        <button id="read-clipboard" type="button" class="button">Read clipboard</button>
+        <label class="button button-file">
+          Open .htm file
+          <input id="file-input" type="file" accept=".htm,.html,text/html" hidden />
+        </label>
+        <select id="fixture-picker" class="select" aria-label="Load a fixture">
+          <option value="">Load a fixture…</option>
+        </select>
+        <button id="clear" type="button" class="button button-quiet">Clear</button>
+      </div>
+    </section>
+
+    <section id="summary" class="summary" hidden>
+      <div class="summary-grid" id="summary-grid"></div>
+    </section>
+
+    <main class="panes" id="panes" hidden>
+      <section class="pane">
+        <header class="pane-header">
+          <h2>1 · Raw clipboard HTML</h2>
+          <div class="pane-tools">
+            <span id="raw-size" class="pill"></span>
+            <button class="button button-small" data-copy="raw">Copy</button>
+          </div>
+        </header>
+        <div class="pane-tabs" role="tablist" id="raw-tabs">
+          <button class="tab is-active" data-raw-tab="html" role="tab">text/html</button>
+          <button class="tab" data-raw-tab="text" role="tab">text/plain</button>
+          <button class="tab" data-raw-tab="types" role="tab">Flavours</button>
+          <button class="tab" data-raw-tab="css" role="tab">Word CSS</button>
+        </div>
+        <pre class="pane-body code" id="raw-body"></pre>
+      </section>
+
+      <section class="pane">
+        <header class="pane-header">
+          <h2>2 · Word document model</h2>
+          <div class="pane-tools">
+            <button class="button button-small" data-copy="model">Copy JSON</button>
+          </div>
+        </header>
+        <div class="pane-tabs" role="tablist" id="model-tabs">
+          <button class="tab is-active" data-model-tab="outline" role="tab">Outline</button>
+          <button class="tab" data-model-tab="json" role="tab">JSON</button>
+          <button class="tab" data-model-tab="lists" role="tab">List definitions</button>
+          <button class="tab" data-model-tab="styles" role="tab">Styles</button>
+          <button class="tab" data-model-tab="assets" role="tab">Images &amp; links</button>
+          <button class="tab" data-model-tab="signals" role="tab">Detection</button>
+        </div>
+        <div class="pane-body" id="model-body"></div>
+      </section>
+
+      <section class="pane">
+        <header class="pane-header">
+          <h2>3 · Rendered output</h2>
+          <div class="pane-tools">
+            <label class="inline-field">
+              Markers
+              <select id="marker-mode" class="select select-small">
+                <option value="native">native</option>
+                <option value="element">element</option>
+              </select>
+            </label>
+            <button class="button button-small" data-copy="html">Copy HTML</button>
+            <button class="button button-primary button-small" id="download-html">
+              Download HTML
+            </button>
+          </div>
+        </header>
+        <div class="pane-tabs" role="tablist" id="output-tabs">
+          <button class="tab is-active" data-output-tab="preview" role="tab">Preview</button>
+          <button class="tab" data-output-tab="html" role="tab">HTML</button>
+          <button class="tab" data-output-tab="css" role="tab">CSS</button>
+          <button class="tab" data-output-tab="report" role="tab">Fidelity</button>
+          <button class="tab" data-output-tab="diagnostics" role="tab">
+            Diagnostics <span class="badge" id="diagnostics-count">0</span>
+          </button>
+        </div>
+        <div class="pane-body" id="output-body"></div>
+      </section>
+    </main>
+
+    <section class="empty-state" id="empty-state">
+      <h2>Nothing pasted yet</h2>
+      <p>
+        This page is the engine's development environment. Paste real Word content into the box
+        above and you will see, side by side: the untouched clipboard payload, the canonical
+        document model the parser builds from it, and the HTML the renderer produces from that
+        model.
+      </p>
+      <p>
+        Anything the engine cannot represent exactly appears under <strong>Diagnostics</strong>
+        rather than disappearing quietly, and <strong>Export fixture</strong> turns whatever you
+        pasted into a regression test.
+      </p>
+    </section>
+
+    <footer class="app-footer">
+      <span>word-clipboard-engine</span>
+      <span id="footer-status">idle</span>
+    </footer>
+
+    <script type="module" src="./lab.ts"></script>
+  </body>
+</html>

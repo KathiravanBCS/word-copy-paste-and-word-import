@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fixture Gallery — Word Clipboard Engine</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ctext y=%2713%27 font-size=%2713%27%3E%E2%97%8F%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-title">
+        <h1>Fixture Gallery</h1>
+        <p>Every Word construct the engine is tested against, rendered from its fixture.</p>
+      </div>
+      <nav class="app-nav">
+        <a href="./clipboard-lab/">Clipboard Lab</a>
+        <a
+          href="https://github.com/KathiravanBCS/word-copy-paste-and-word-import"
+          rel="noreferrer noopener"
+          target="_blank"
+          >Source</a
+        >
+      </nav>
+    </header>
+
+    <main class="gallery">
+      <p class="note">
+        These are the checked-in fixtures under <code>src/fixtures/word/</code>. Each one is a Word
+        clipboard payload, parsed and rendered here by the same code path a real paste takes. Open
+        one in the Clipboard Lab to see its raw payload, its model and its diagnostics.
+      </p>
+      <div id="gallery-body"></div>
+    </main>
+
+    <footer class="app-footer">
+      <span>word-clipboard-engine</span>
+      <span id="gallery-status"></span>
+    </footer>
+
+    <script type="module" src="./gallery.ts"></script>
+  </body>
+</html>

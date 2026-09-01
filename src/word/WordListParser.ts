@@ -377,7 +377,7 @@ export function inferNumberFormat(
     return { format: 'decimal', levelText };
   }
 
-  const single = /^([(\[]?)([0-9]+|[IVXLCDM]+|[ivxlcdm]+|[A-Z]|[a-z])([.)\]]?)$/.exec(trimmed);
+  const single = /^([([]?)([0-9]+|[IVXLCDM]+|[ivxlcdm]+|[A-Z]|[a-z])([.)\]]?)$/.exec(trimmed);
   if (!single) return null;
   const prefix = single[1] ?? '';
   const body = single[2]!;
