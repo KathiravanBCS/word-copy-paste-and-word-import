@@ -146,6 +146,8 @@ download(new Blob([file], { type: 'text/html;charset=utf-8' }), suggestFileName(
 | Images | data URIs and clipboard blobs resolved; local `file:///` references become labelled placeholders |
 | Hyperlinks & bookmarks | out of line in the model, so a bold run inside a link survives |
 | Page & section breaks | `page-break` blocks, with a diagnostic for what page setup could not carry over |
+| Paragraph spacing | additive, matching Word — rendered as padding, never as CSS margin, which would collapse two touching gaps into one |
+| Page geometry | the downloaded standalone file uses the payload's own `@page` size/margins, not a Letter-with-1in guess |
 
 ## What it does not do silently
 
@@ -189,7 +191,7 @@ standalone HTML, and exports whatever you pasted as a new fixture.
 ## Development
 
 ```bash
-npm test              # 217 tests
+npm test              # 221 tests
 npm run typecheck
 npm run lint
 npm run dev           # clipboard lab at :5180

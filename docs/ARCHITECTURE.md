@@ -118,6 +118,33 @@ matches the characters inside a quoted value — and the engine explores
 exponentially many partitions of the same input. That turned a 1 ms parse into
 771 ms on a small fixture and hung the test suite outright on a large one.
 
+### Why paragraph spacing is padding, not margin
+
+Word states `spaceBefore`/`spaceAfter` as absolute values, and the gap between
+two paragraphs is the *sum* of the first one's space-after and the second
+one's space-before. CSS block-level margins do not work that way: two
+touching margins **collapse** to the larger of the two, not their sum. A 12pt
+space-after meeting a 12pt space-before renders as a 12pt gap instead of 24pt
+— half of what Word declared, on every paragraph boundary in the document.
+
+```
+Word:      12pt spaceAfter + 12pt spaceBefore = 24pt gap
+CSS margin: max(12pt, 12pt)                   = 12pt gap   (wrong)
+CSS padding: 12pt + 12pt                      = 24pt gap   (correct)
+```
+
+Padding never collapses, so `spaceBefore`/`spaceAfter` are rendered as
+`padding-top`/`padding-bottom`, and every container class that could carry a
+browser's own default margin (`<blockquote>`, list items, bordered/shaded
+containers) is explicitly zeroed in the base stylesheet — a UA default is just
+as capable of adding an unrequested gap as a collapse is of removing one.
+
+The same reasoning is why the standalone document shell reads its page width
+and padding from the payload's own `@page` rule (`size`/`margin`) when Word
+declared one, rather than assuming Letter with 1in margins. A payload with A4
+paper or non-uniform margins gets its own geometry, not a guess that happens
+to be right for the common case.
+
 ## The model
 
 `WordDocument` is the source of truth. Every consumer — this renderer, an editor

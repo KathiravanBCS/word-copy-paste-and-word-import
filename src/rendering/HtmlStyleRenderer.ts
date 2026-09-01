@@ -143,8 +143,17 @@ export function renderParagraphStyle(
   if (formatting.alignment) style.set('text-align', formatting.alignment);
   if (formatting.marginLeft) style.set('margin-left', renderLength(formatting.marginLeft, options));
   if (formatting.marginRight) style.set('margin-right', renderLength(formatting.marginRight, options));
-  if (formatting.spaceBefore) style.set('margin-top', renderLength(formatting.spaceBefore, options));
-  if (formatting.spaceAfter) style.set('margin-bottom', renderLength(formatting.spaceAfter, options));
+
+  // Word's spaceBefore/spaceAfter are rendered as padding, never as margin.
+  // Adjacent block-level margins collapse in CSS — the browser keeps only the
+  // larger of two touching margins, not their sum — so a 12pt space-after
+  // meeting a 12pt space-before renders as a 12pt gap instead of 24pt. Word's
+  // box model has no such collapsing: the gap between two paragraphs really is
+  // the sum of both. Padding never collapses, so it is the only property that
+  // reproduces the numbers Word actually declared. See ARCHITECTURE.md.
+  if (formatting.spaceBefore) style.set('padding-top', renderLength(formatting.spaceBefore, options));
+  if (formatting.spaceAfter) style.set('padding-bottom', renderLength(formatting.spaceAfter, options));
+
   if (formatting.textIndent) style.set('text-indent', renderLength(formatting.textIndent, options));
 
   const lineSpacing = formatting.lineSpacing;
@@ -173,8 +182,14 @@ export function renderParagraphStyle(
 
   if (formatting.borders || formatting.shading) {
     // Word puts padding inside a bordered/shaded paragraph; without it the
-    // border sits flush against the glyphs.
-    if (!style.has('padding')) style.set('padding', '1pt 4pt');
+    // border sits flush against the glyphs. Horizontal padding is only ever
+    // needed for the box itself, so it is set unconditionally; vertical
+    // padding defers to spaceBefore/spaceAfter above when either is present,
+    // and only supplies a small fallback when neither is.
+    if (!style.has('padding-top')) style.set('padding-top', '1pt');
+    if (!style.has('padding-bottom')) style.set('padding-bottom', '1pt');
+    style.set('padding-left', '4pt');
+    style.set('padding-right', '4pt');
   }
 
   return style.toString();

@@ -1,7 +1,7 @@
 # Testing
 
 ```bash
-npm test                      # everything — 217 tests
+npm test                      # everything — 221 tests
 npm run test:word             # parsing + regression only
 npm run test:golden           # the fixture suite
 npm run typecheck

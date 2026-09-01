@@ -2,6 +2,7 @@ import type { WordDocument } from '../model/Document.js';
 import { escapeHtmlAttribute, escapeHtmlText } from '../util/dom.js';
 import { renderWordDocument, type RenderOptions, type RenderResult } from './HtmlRenderer.js';
 import { buildFidelityReport, type FidelityReport } from '../diagnostics/FidelityReport.js';
+import { parseBoxShorthand, parseWordLength, roundTo } from '../word/WordLengthParser.js';
 
 /**
  * Standalone HTML document output.
@@ -27,8 +28,18 @@ export interface DocumentRenderOptions extends RenderOptions {
    * used. Default true; set false for a bare document with no chrome.
    */
   pageShell?: boolean;
-  /** Content width for the page shell. Default `8.5in` minus Word's margins. */
+  /**
+   * Content width for the page shell. Defaults to the payload's own `@page`
+   * size and margins when Word declared one (its page width minus its own
+   * left/right margins), falling back to `6.5in` — Letter minus 1in margins —
+   * only when it did not. Set explicitly to override either.
+   */
   contentWidth?: string;
+  /**
+   * Page padding for the page shell, as a CSS `padding` value. Defaults to
+   * the payload's own `@page` margins, falling back to `0.6in 0.75in`.
+   */
+  pagePadding?: string;
   /**
    * Append a fidelity summary as an HTML comment at the end of the document.
    * Default true — it costs nothing and makes a downloaded file
@@ -58,6 +69,7 @@ export function renderStandaloneHtml(
     'Pasted from Microsoft Word';
   const lang = options.lang ?? 'en';
   const prefix = options.classPrefix ?? 'wce';
+  const geometry = resolvePageGeometry(document);
 
   const parts: string[] = [
     '<!doctype html>',
@@ -67,7 +79,7 @@ export function renderStandaloneHtml(
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     `<title>${escapeHtmlText(title)}</title>`,
     '<style>',
-    documentShellCss(prefix, options),
+    documentShellCss(prefix, options, geometry),
     rendered.css,
     '</style>',
     '</head>',
@@ -90,6 +102,59 @@ export function renderStandaloneHtml(
 }
 
 /**
+ * The page geometry the payload itself declared.
+ *
+ * Word writes one `@page` rule per section (`@page WordSection1 { size:8.5in
+ * 11.0in; margin:1.0in 1.0in 1.0in 1.0in; }`), which the stylesheet parser
+ * already captures as raw declarations. This is the one place they are read
+ * back out, so the downloaded file's page width and margins come from the
+ * document that was actually pasted rather than from a Letter-with-1in-margins
+ * guess that happens to be right for a great many documents and wrong for the
+ * rest.
+ *
+ * Only the first section's page setup is used. A document with a genuine
+ * section-by-section page-size change is already flagged with
+ * `WORD_SECTION_BREAK_APPROXIMATED`, and picking one geometry for a single
+ * scrolling page is the same approximation whichever section it comes from.
+ */
+interface PageGeometry {
+  contentWidth: string;
+  margin: string;
+}
+
+function resolvePageGeometry(document: WordDocument): PageGeometry | null {
+  const sectionName = document.metadata.sections[0];
+  const declarations = sectionName
+    ? document.styles.pages[sectionName]
+    : Object.values(document.styles.pages)[0];
+  if (!declarations) return null;
+
+  const size = declarations['size'];
+  const pageWidth = size ? parseWordLength(size.trim().split(/\s+/)[0], { defaultUnit: 'in' }) : undefined;
+
+  const marginRaw = declarations['margin'];
+  const margins = marginRaw ? parseBoxShorthand(marginRaw, { defaultUnit: 'in' }) : undefined;
+  const marginTop = margins?.top ?? parseWordLength(declarations['margin-top'], { defaultUnit: 'in' });
+  const marginRight = margins?.right ?? parseWordLength(declarations['margin-right'], { defaultUnit: 'in' });
+  const marginBottom = margins?.bottom ?? parseWordLength(declarations['margin-bottom'], { defaultUnit: 'in' });
+  const marginLeft = margins?.left ?? parseWordLength(declarations['margin-left'], { defaultUnit: 'in' });
+
+  if (!pageWidth && !marginTop && !marginRight && !marginBottom && !marginLeft) return null;
+
+  const geometry: PageGeometry = { margin: '0.6in 0.75in', contentWidth: '6.5in' };
+  if (marginTop || marginRight || marginBottom || marginLeft) {
+    geometry.margin = [marginTop, marginRight, marginBottom, marginLeft]
+      .map((m) => (m ? `${m.px}px` : '0'))
+      .join(' ');
+  }
+  if (pageWidth) {
+    const contentWidthPx = pageWidth.px - (marginLeft?.px ?? 0) - (marginRight?.px ?? 0);
+    if (contentWidthPx > 0) geometry.contentWidth = `${roundTo(contentWidthPx, 2)}px`;
+  }
+  return geometry;
+}
+
+/**
  * Page chrome plus a typographic baseline.
  *
  * Word content arrives with its own fonts and sizes on almost everything, so
@@ -97,8 +162,13 @@ export function renderStandaloneHtml(
  * a default font for anything unstyled, and print rules so the downloaded
  * file prints the way it looked.
  */
-function documentShellCss(prefix: string, options: DocumentRenderOptions): string {
-  const width = options.contentWidth ?? '6.5in';
+function documentShellCss(
+  prefix: string,
+  options: DocumentRenderOptions,
+  geometry: PageGeometry | null,
+): string {
+  const width = options.contentWidth ?? geometry?.contentWidth ?? '6.5in';
+  const pagePadding = options.pagePadding ?? geometry?.margin ?? '0.6in 0.75in';
   return `
 :root { color-scheme: light dark; }
 * { box-sizing: border-box; }
@@ -114,7 +184,7 @@ body {
 .${prefix}-page {
   max-width: ${width};
   margin: 0 auto;
-  padding: 0.6in 0.75in;
+  padding: ${pagePadding};
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14), 0 6px 18px rgba(0, 0, 0, 0.06);

@@ -266,3 +266,56 @@ describe('standalone document', () => {
     expect(suggestFileName(byId('basic/plain-paragraphs'))).toBe('word-paste.html');
   });
 });
+
+describe('standalone document page geometry', () => {
+  it('uses the payload’s own @page size and margins for the page shell', () => {
+    // The engagement-report fixture declares @page WordSection1 {size:8.5in
+    // 11.0in; margin:1.0in 1.0in 1.0in 1.0in;} — content width should be
+    // 8.5in - 1in - 1in = 6.5in, not the 6.5in *default* that would also
+    // happen to match here by coincidence; the asymmetric case below is the
+    // one that actually distinguishes "read from the payload" from "guessed".
+    const document = byId('complex/engagement-report');
+    const { document: file } = renderStandaloneHtml(document);
+    expect(file).toContain('max-width: 624px');
+    expect(file).toContain('padding: 96px 96px 96px 96px');
+  });
+
+  it('reflects asymmetric margins and a non-Letter page size', () => {
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office">
+      <meta name=ProgId content=Word.Document>
+      <style><!--
+        @page WordSection1 {size:8.27in 11.69in; margin:0.5in 1.5in 0.5in 2.0in;}
+        div.WordSection1 {page:WordSection1;}
+      --></style>
+      <body><div class=WordSection1><!--StartFragment-->
+      <p class=MsoNormal>A4 page, uneven margins.<o:p></o:p></p>
+      <!--EndFragment--></div></body></html>`;
+    const document = parseWordHtmlString(html);
+    const { document: file } = renderStandaloneHtml(document);
+    // content width = 8.27in - 2.0in - 1.5in = 4.77in = 4.77*96 = 457.92px
+    expect(file).toContain('max-width: 457.92px');
+    // margin order is CSS box order: top right bottom left
+    expect(file).toContain('padding: 48px 144px 48px 192px');
+  });
+
+  it('falls back to a Letter-minus-1in default when the payload declares no @page', () => {
+    const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office">
+      <meta name=ProgId content=Word.Document>
+      <body><div class=WordSection1><p class=MsoNormal>x</p></div></body></html>`;
+    const document = parseWordHtmlString(html, { forceWord: true });
+    const { document: file } = renderStandaloneHtml(document);
+    expect(file).toContain('max-width: 6.5in');
+    expect(file).toContain('padding: 0.6in 0.75in');
+  });
+
+  it('lets the caller override the resolved geometry explicitly', () => {
+    const document = byId('complex/engagement-report');
+    const { document: file } = renderStandaloneHtml(document, {
+      contentWidth: '500px',
+      pagePadding: '10px',
+    });
+    expect(file).toContain('max-width: 500px');
+    expect(file).toContain('padding: 10px');
+    expect(file).not.toContain('max-width: 624px');
+  });
+});

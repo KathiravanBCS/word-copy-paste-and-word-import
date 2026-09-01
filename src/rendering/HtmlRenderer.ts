@@ -463,9 +463,19 @@ function baseCss(prefix: string): string {
   return [
     `.${prefix}-document { }`,
     `.${prefix}-p { margin: 0; }`,
+    // A generic block (a bordered/shaded div) carries no UA default margin,
+    // but a genuine <blockquote> does — 1em top/bottom, 40px left/right in
+    // every mainstream browser — and none of it is a value the model ever
+    // declared. Left alone it stacks on top of the padding-based spacing
+    // above and adds an indent Word never asked for.
+    // A container's tag is <blockquote> only for role 'blockquote' (class
+    // wce-block) and <div> otherwise (wce-block or wce-textbox); the element
+    // selector covers the one case the class rule above does not already.
+    `.${prefix}-block, .${prefix}-textbox { margin: 0; }`,
+    `.${prefix}-document blockquote { margin: 0; }`,
     `.${prefix}-list { }`,
-    `.${prefix}-list-item { }`,
-    `.${prefix}-list-spacer { }`,
+    `.${prefix}-list-item { margin: 0; }`,
+    `.${prefix}-list-spacer { margin: 0; }`,
   ].join('\n');
 }
 
