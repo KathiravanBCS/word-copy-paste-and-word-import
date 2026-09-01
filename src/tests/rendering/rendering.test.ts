@@ -11,8 +11,25 @@ const byId = (id: string): WordDocument => {
 };
 
 describe('list rendering', () => {
-  it('compiles Word bullets into a native counter style', () => {
-    const { html, css } = renderWordDocument(byId('bullets/bullet-default'));
+  it('defaults to element markers, whose gap matches Word — a native ::marker does not', () => {
+    // This is the whole reason 'element' is the default rather than 'native'.
+    // A native CSS counter-style / ::marker is right-aligned within its
+    // gutter: the browser piles any blank space to the LEFT of the digits,
+    // flush against the text on the right. Word's numbering is a literal tab
+    // after the number, landing at a fixed column with the blank space AFTER
+    // the number, before the text. Verified directly in Chromium with
+    // identical gutter widths: native renders "1. Text" (no visible gap),
+    // element renders "1.1.1    Text" (Word's actual spacing) — see the
+    // 'element marker mode' describe block below for the geometry assertion.
+    const { html } = renderWordDocument(byId('bullets/bullet-default'));
+    expect(html).toContain('<span class="wce-marker" aria-hidden="true">•</span>');
+    expect(html).not.toContain('list-style-type: wce-');
+  });
+
+  it('compiles Word bullets into a native counter style, when explicitly asked for', () => {
+    const { html, css } = renderWordDocument(byId('bullets/bullet-default'), {
+      markerMode: 'native',
+    });
     expect(html).toContain('<ul');
     expect(html).not.toContain('<span class="wce-marker"');
     expect(css).toContain('system: cyclic');
@@ -22,14 +39,16 @@ describe('list rendering', () => {
     expect(css).toContain('list-style-type: wce-');
   });
 
-  it('compiles a simple Word number format into a native counter style', () => {
-    const { css } = renderWordDocument(byId('numbering/roman-numbering'));
+  it('compiles a simple Word number format into a native counter style, when asked for', () => {
+    const { css } = renderWordDocument(byId('numbering/roman-numbering'), { markerMode: 'native' });
     expect(css).toContain('system: extends upper-roman');
     expect(css).toContain('suffix: ". "');
   });
 
-  it('falls back to a real ::marker for a level text CSS cannot express', () => {
-    const { html, css } = renderWordDocument(byId('numbering/multilevel-numbering'));
+  it('falls back to a real ::marker for a level text CSS cannot express, in native mode', () => {
+    const { html, css } = renderWordDocument(byId('numbering/multilevel-numbering'), {
+      markerMode: 'native',
+    });
     // `%1.%2` has no counter-style equivalent, so the literal marker is put on
     // the item and drawn by ::marker — still a marker, never text.
     expect(html).toContain('data-marker="1.1"');
@@ -38,33 +57,60 @@ describe('list rendering', () => {
     expect(html).not.toMatch(/>1\.1\s*Orbis/);
   });
 
-  it('renders a marker element when asked to', () => {
-    const { html, css } = renderWordDocument(byId('bullets/bullet-default'), {
-      markerMode: 'element',
-    });
-    expect(html).toContain('<span class="wce-marker" aria-hidden="true">•</span>');
-    expect(css).toContain('list-style-type: none');
-    expect(css).toContain('text-indent: -24px');
+  it('renders a marker element by default, and can render native markers when asked to', () => {
+    const byDefault = renderWordDocument(byId('bullets/bullet-default'));
+    expect(byDefault.html).toContain('<span class="wce-marker" aria-hidden="true">•</span>');
+    expect(byDefault.css).toContain('list-style-type: none');
+    expect(byDefault.css).toContain('text-indent: -24px');
+
+    const native = renderWordDocument(byId('bullets/bullet-default'), { markerMode: 'native' });
+    expect(native.html).not.toContain('wce-marker');
+    expect(native.css).toContain('list-style-type: wce-');
   });
 
-  it('sets an explicit value so a copied list keeps Word’s numbers', () => {
+  it('shows Word’s own numbers as the literal marker text by default', () => {
+    // In element mode the number IS the visible text (no CSS counter to keep
+    // in sync), so the start-at value shows up as ordinary marker text rather
+    // than as a native <li value>.
     const { html } = renderWordDocument(byId('numbering/start-at'));
+    expect(html).toContain('>5.</span>');
+    expect(html).toContain('>6.</span>');
+    expect(html).toContain('>7.</span>');
+  });
+
+  it('sets an explicit <li value> in native mode so a copied list keeps Word’s numbers', () => {
+    const { html } = renderWordDocument(byId('numbering/start-at'), { markerMode: 'native' });
     expect(html).toContain('value="5"');
     expect(html).toContain('value="6"');
     expect(html).toContain('value="7"');
   });
 
   it('preserves the marker font when the glyph could not be mapped', () => {
-    const { css } = renderWordDocument(byId('bullets/bullet-default'));
+    const { css } = renderWordDocument(byId('bullets/bullet-default'), { markerMode: 'native' });
     // Word's level-2 bullet really is the letter "o" in Courier New.
     expect(css).toContain('font-family: "Courier New"');
   });
 
   it('nests lists rather than repeating the indent', () => {
-    const { css } = renderWordDocument(byId('bullets/bullet-default'));
+    const { css } = renderWordDocument(byId('bullets/bullet-default'), { markerMode: 'native' });
     const paddings = [...css.matchAll(/padding-left: ([\d.]+)px/g)].map((m) => Number(m[1]));
     // Each level adds half an inch relative to its parent, not absolutely.
     expect(paddings).toEqual([48, 48, 48]);
+  });
+});
+
+describe('element marker mode geometry', () => {
+  it('reserves a fixed-width gutter so the marker sits left-aligned with a real gap before the text', () => {
+    // The property under test, stated precisely: in element mode the marker
+    // span is `min-width: hangingPx` and the <li> uses `text-indent:
+    // -hangingPx`, which is what makes an inline-block marker narrower than
+    // its reserved width leave blank space to its OWN right (between the
+    // marker and the text) rather than to its left (Chromium's native
+    // ::marker behaviour) — see docs/LIST-PARSING.md.
+    const { css } = renderWordDocument(byId('numbering/multilevel-numbering'));
+    expect(css).toMatch(/> li > \.wce-marker \{[^}]*display: inline-block;/);
+    expect(css).toMatch(/> li > \.wce-marker \{[^}]*min-width: \d+px;/);
+    expect(css).toMatch(/> li \{[^}]*text-indent: -\d+px;/);
   });
 });
 
@@ -239,12 +285,19 @@ describe('standalone document', () => {
     expect(file).toContain('<meta charset="utf-8">');
     expect(file).toContain('<title>');
     expect(file).toContain('</html>');
-    // The generated counter styles must be in the head, or the native markers
+    // The generated list-marker geometry must be in the head, or the markers
     // do not survive the trip to a file on disk.
-    expect(file).toContain('@counter-style');
+    expect(file).toContain('wce-marker');
+    expect(file).toContain('min-width:');
     expect(file).toContain('<style>');
     expect(file).not.toContain('<script');
     expect(report.paragraphs).toBeGreaterThan(0);
+  });
+
+  it('still puts generated @counter-style rules in the head in native mode', () => {
+    const document = byId('numbering/roman-numbering');
+    const { document: file } = renderStandaloneHtml(document, { markerMode: 'native' });
+    expect(file).toContain('@counter-style');
   });
 
   it('appends a machine-readable fidelity report', () => {

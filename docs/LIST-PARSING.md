@@ -184,10 +184,46 @@ half an inch per level, and `explicit: false` records that it was a default.
 
 ## 6. Rendering the marker
 
-The requirement: **a list marker is never text.** Two modes, both of which keep
-that separation.
+The requirement: **a list marker is never text.** Two modes keep that
+separation, and they place the marker differently enough that only one of them
+matches Word's actual on-page position.
 
-### `native` (default)
+### `element` (default)
+
+`list-style-type: none` plus an explicit `<span class="wce-marker">`:
+
+```html
+<li style="padding-left:48px;text-indent:-48px">
+  <span class="wce-marker" style="display:inline-block;min-width:48px;text-indent:0">1.1.1</span>Orbis India
+</li>
+```
+
+The `<li>` starts its first line at `-hangingPx` (so the marker begins at the
+block's own left edge, matching Word's hanging-indent start), and the marker
+span *reserves* `min-width: hangingPx` — an `inline-block` narrower than its
+reserved width leaves the unused space to its own right, between the marker
+and the paragraph text. That is Word's actual layout: the number is followed by
+a literal tab character to a fixed column, so the blank space sits **after**
+the number and **before** the text.
+
+This is why `element` is the default rather than `native`, and it was not a
+guess — it was checked directly in Chromium, rendering the identical CSS both
+modes generate at the same gutter width:
+
+```
+native:  1. Saji George Yohannan            (marker flush against the text)
+element: 1.1.1    Saji George Yohannan      (Word's actual gap)
+```
+
+A native `::marker`/`list-style-type` marker is **right-aligned** within its
+gutter — any blank space in the gutter collects to the marker's *left*, flush
+against the text on the *right*. Widening the gutter does not create a wider
+gap between the marker and the text; it only pushes the whole "marker + text"
+unit further right, since the marker stays glued to the text either way. That
+is a real, verified browser behaviour, not a Word semantic being reinterpreted
+— it is simply the wrong CSS mechanism for reproducing a tab stop.
+
+### `native`
 
 Real `<ul>`/`<ol>` with real browser-drawn markers. Word's numbering definition
 is compiled into a generated `@counter-style`:
@@ -225,15 +261,13 @@ font:
 .wce-4 > li::marker { font-family: "Courier New"; }
 ```
 
-### `element`
-
-`list-style-type: none` plus an explicit `<span class="wce-marker">`, with
-`padding-left` / negative `text-indent` reproducing Word's hanging-indent
-geometry exactly. Less native, but portable to environments that strip `::marker`
-styling — and the marker is still a separate element, never part of the text.
+Use `native` when the target matters more than the pixel position — a real
+`<li value>` lets a paste land inside another editor's own numbered list and
+auto-continue it, and an external stylesheet can restyle `::marker` in a way it
+cannot restyle a plain `<span>`. Pass it explicitly:
 
 ```ts
-renderWordDocument(document, { markerMode: 'element' });
+renderWordDocument(document, { markerMode: 'native' });
 ```
 
 ## 7. Nesting

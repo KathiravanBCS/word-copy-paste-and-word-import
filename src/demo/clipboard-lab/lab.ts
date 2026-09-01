@@ -71,7 +71,7 @@ const state: LabState = {
   document: null,
   html: '',
   css: '',
-  markerMode: 'native',
+  markerMode: 'element',
   rawTab: 'html',
   modelTab: 'outline',
   outputTab: 'preview',

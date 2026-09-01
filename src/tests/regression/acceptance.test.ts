@@ -123,7 +123,13 @@ describe('acceptance criteria', () => {
     const html = renderWordDocument(document).html;
     expect(html).not.toMatch(/Article\s+[IVX]/);
     expect(html).not.toMatch(/Section\s+\d+\.\d+/);
-    expect(html).toContain('data-marker="1.1"');
+    // Default (element) mode: the literal marker Word computed is the visible
+    // text of the marker span.
+    expect(html).toContain('>1.1</span>');
+    // Native mode: the same literal text drives a real ::marker via
+    // data-marker, since %1.%2 has no CSS counter-style equivalent.
+    const native = renderWordDocument(document, { markerMode: 'native' }).html;
+    expect(native).toContain('data-marker="1.1"');
   });
 
   it('6. Word list start values are preserved', () => {
@@ -131,7 +137,13 @@ describe('acceptance criteria', () => {
     expect(document.lists[0]!.levels[0]!.startAt).toBe(5);
     expect(markers(document)[0]!.startAt).toBe(5);
     expect(markers(document).map((i) => i.marker.text)).toEqual(['5.', '6.', '7.']);
-    expect(renderWordDocument(document).html).toContain('value="5"');
+    // Default (element) mode: the start-at value is baked into the marker's
+    // own visible text, so it renders correctly with no <li value> needed.
+    expect(renderWordDocument(document).html).toContain('>5.</span>');
+    // Native mode: the same value drives a real <li value> and <ol start>.
+    const native = renderWordDocument(document, { markerMode: 'native' }).html;
+    expect(native).toContain('value="5"');
+    expect(native).toContain('start="5"');
   });
 
   it('6b. a new list restarts and a continuing list does not', () => {
@@ -279,17 +291,25 @@ describe('acceptance criteria', () => {
 
   it('14. the renderer invents no numbering semantics', () => {
     const document = byId('numbering/roman-numbering');
-    const html = renderWordDocument(document).html;
-    // The markers come from Word's definition: upper-roman with a "." suffix,
-    // expressed as a real counter style rather than as text.
-    const { css } = renderWordDocument(document);
-    expect(css).toContain('system: extends upper-roman');
-    expect(css).toContain('suffix: ". "');
-    expect(html).toContain('value="1"');
-    expect(html).toContain('value="2"');
-    expect(html).toContain('value="3"');
-    // And the marker text is not in the content.
+    // Default (element) mode: the markers come from Word's own definition
+    // (upper-roman, "." suffix) rendered as the literal computed text —
+    // I. / II. / III., never Word's numbers replaced by anything else, and
+    // never welded into the paragraph's own text content.
+    const { html } = renderWordDocument(document);
+    expect(html).toContain('>I.</span>');
+    expect(html).toContain('>II.</span>');
+    expect(html).toContain('>III.</span>');
     expect(html).not.toMatch(/>I\.\s*Introduction/);
+
+    // Native mode: the same definition instead drives a real @counter-style
+    // and <li value>, still without inventing a scheme of its own.
+    const native = renderWordDocument(document, { markerMode: 'native' });
+    expect(native.css).toContain('system: extends upper-roman');
+    expect(native.css).toContain('suffix: ". "');
+    expect(native.html).toContain('value="1"');
+    expect(native.html).toContain('value="2"');
+    expect(native.html).toContain('value="3"');
+    expect(native.html).not.toMatch(/>I\.\s*Introduction/);
   });
 
   it('15. no application numbering scheme replaces Word’s', () => {

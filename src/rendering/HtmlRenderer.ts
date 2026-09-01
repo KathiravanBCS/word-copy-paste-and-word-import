@@ -80,7 +80,17 @@ interface RenderContext {
 export function renderWordDocument(document: WordDocument, options: RenderOptions = {}): RenderResult {
   const prefix = options.classPrefix ?? 'wce';
   const cssMode = options.cssMode ?? 'separate';
-  const markerMode: ListMarkerMode = cssMode === 'none' ? 'element' : (options.markerMode ?? 'native');
+  // 'element' is the default, not 'native'. A native CSS counter-style /
+  // ::marker is right-aligned within its gutter — the browser piles any
+  // blank space to the LEFT of the digits, flush against the text on the
+  // right — while Word's numbering is a literal tab after the number, which
+  // lands at a fixed column and leaves the blank space AFTER the number,
+  // before the text. Verified directly in Chromium: identical gutter width,
+  // 'native' renders "1. Saji George" (no visible gap), 'element' renders
+  // "1.1.1    Saji George" (Word's actual spacing). 'native' stays available
+  // for callers who need it (a target editor's own list auto-continuation,
+  // ::marker restyling from outside) but does not match Word's positions.
+  const markerMode: ListMarkerMode = cssMode === 'none' ? 'element' : (options.markerMode ?? 'element');
 
   const ctx: RenderContext = {
     document,

@@ -1,12 +1,15 @@
 <div class="wce-document">
-  <ul class="wce-list wce-2" data-word-list="l0" data-word-level="1" data-word-instance="list-1-l0-lfo1">
-    <li class="wce-list-item" data-word-list="l0" data-word-level="1" data-word-level-text="U+F0B7" data-word-number-format="bullet" data-word-raw-glyph="U+F0B7" data-word-marker-font="Symbol" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Parent<ul class="wce-list wce-4" data-word-list="l0" data-word-level="2" data-word-instance="list-1-l0-lfo1">
-      <li class="wce-list-item" data-word-list="l0" data-word-level="2" data-word-level-text="o" data-word-number-format="bullet" data-word-marker-font="Courier New" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Child<ul class="wce-list wce-6" data-word-list="l0" data-word-level="3" data-word-instance="list-1-l0-lfo1">
-        <li class="wce-list-item" data-word-list="l0" data-word-level="3" data-word-level-text="U+F0A7" data-word-number-format="bullet" data-word-raw-glyph="U+F0A7" data-word-marker-font="Wingdings" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Grandchild</li>
-      </ul>
-    </li>
-  </ul>
-</li>
+  <ul class="wce-list wce-1" data-word-list="l0" data-word-level="1" data-word-instance="list-1-l0-lfo1">
+    <li class="wce-list-item" data-word-list="l0" data-word-level="1" data-word-level-text="U+F0B7" data-word-number-format="bullet" data-word-raw-glyph="U+F0B7" data-word-marker-font="Symbol" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+      <span class="wce-marker" aria-hidden="true">•</span>Parent<ul class="wce-list wce-2" data-word-list="l0" data-word-level="2" data-word-instance="list-1-l0-lfo1">
+      <li class="wce-list-item" data-word-list="l0" data-word-level="2" data-word-level-text="o" data-word-number-format="bullet" data-word-marker-font="Courier New" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+        <span class="wce-marker" aria-hidden="true">o</span>Child<ul class="wce-list wce-1" data-word-list="l0" data-word-level="3" data-word-instance="list-1-l0-lfo1">
+        <li class="wce-list-item" data-word-list="l0" data-word-level="3" data-word-level-text="U+F0A7" data-word-number-format="bullet" data-word-raw-glyph="U+F0A7" data-word-marker-font="Wingdings" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+          <span class="wce-marker" aria-hidden="true">▪</span>Grandchild</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 </div>
 
@@ -40,35 +43,33 @@
 .wce-table { max-width: 100%; }
 .wce-table td, .wce-table th { vertical-align: top; }
 .wce-table > thead th { text-align: left; }
-@counter-style wce-1 {
-  system: cyclic;
-  symbols: "•";
-  suffix: " ";
+.wce-1 {
+  margin: 0;
+  padding-left: 48px;
+  list-style-type: none;
+}
+.wce-1 > li {
+  padding-left: 24px;
+  text-indent: -24px;
+}
+.wce-1 > li > .wce-marker {
+  display: inline-block;
+  min-width: 24px;
+  text-indent: 0;
 }
 .wce-2 {
   margin: 0;
   padding-left: 48px;
-  list-style-type: wce-1;
+  list-style-type: none;
 }
-@counter-style wce-3 {
-  system: cyclic;
-  symbols: "o";
-  suffix: " ";
+.wce-2 > li {
+  padding-left: 24px;
+  text-indent: -24px;
 }
-.wce-4 {
-  margin: 0;
-  padding-left: 48px;
-  list-style-type: wce-3;
-}
-.wce-4 > li::marker { font-family: "Courier New"; }
-@counter-style wce-5 {
-  system: cyclic;
-  symbols: "▪";
-  suffix: " ";
-}
-.wce-6 {
-  margin: 0;
-  padding-left: 48px;
-  list-style-type: wce-5;
+.wce-2 > li > .wce-marker {
+  display: inline-block;
+  min-width: 24px;
+  text-indent: 0;
+  font-family: "Courier New";
 }
 </style>

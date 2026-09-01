@@ -1,10 +1,13 @@
 <div class="wce-document">
-  <ol class="wce-list wce-2" data-word-list="l0" data-word-level="1" data-word-instance="list-1-l0-lfo1">
-    <li class="wce-list-item" value="1" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Introduction</li>
-    <li class="wce-list-item" value="2" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Method</li>
-    <li class="wce-list-item" value="3" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">Results</li>
-  </ol>
-</div>
+  <ol class="wce-list wce-1" data-word-list="l0" data-word-level="1" data-word-instance="list-1-l0-lfo1">
+    <li class="wce-list-item" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+      <span class="wce-marker" aria-hidden="true">I.</span>Introduction</li>
+      <li class="wce-list-item" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+        <span class="wce-marker" aria-hidden="true">II.</span>Method</li>
+        <li class="wce-list-item" data-word-list="l0" data-word-level="1" data-word-level-text="%1." data-word-number-format="upper-roman" style="margin-right:0pt;padding-top:0pt;padding-bottom:0pt;widows:2;orphans:2">
+          <span class="wce-marker" aria-hidden="true">III.</span>Results</li>
+        </ol>
+      </div>
 
 <!-- generated stylesheet -->
 <style>
@@ -36,13 +39,18 @@
 .wce-table { max-width: 100%; }
 .wce-table td, .wce-table th { vertical-align: top; }
 .wce-table > thead th { text-align: left; }
-@counter-style wce-1 {
-  system: extends upper-roman;
-  suffix: ". ";
-}
-.wce-2 {
+.wce-1 {
   margin: 0;
   padding-left: 48px;
-  list-style-type: wce-1;
+  list-style-type: none;
+}
+.wce-1 > li {
+  padding-left: 24px;
+  text-indent: -24px;
+}
+.wce-1 > li > .wce-marker {
+  display: inline-block;
+  min-width: 24px;
+  text-indent: 0;
 }
 </style>

@@ -63,12 +63,12 @@ And `·` is not a bullet. It is byte `0xB7` of the **Symbol** font, which is
 the content *before any text run is created*, and emits:
 
 ```html
-<!-- data-word-* attributes elided for readability -->
-<ul class="wce-list wce-2">
-  <li>Parent
-    <ul class="wce-list wce-4">
-      <li>Child
-        <ul class="wce-list wce-6"><li>Grandchild</li></ul>
+<!-- data-word-* / style attributes elided for readability -->
+<ul class="wce-list wce-1">
+  <li><span class="wce-marker">•</span>Parent
+    <ul class="wce-list wce-2">
+      <li><span class="wce-marker">o</span>Child
+        <ul class="wce-list wce-1"><li><span class="wce-marker">▪</span>Grandchild</li></ul>
       </li>
     </ul>
   </li>
@@ -76,11 +76,16 @@ the content *before any text run is created*, and emits:
 ```
 
 ```css
-@counter-style wce-1 { system: cyclic; symbols: "•"; suffix: " "; }
-.wce-2 { margin: 0; padding-left: 48px; list-style-type: wce-1; }
+.wce-1 > li { padding-left: 24px; text-indent: -24px; }
+.wce-1 > li > .wce-marker { display: inline-block; min-width: 24px; }
 ```
 
-A real list, with real browser-drawn markers, at Word's own indentation.
+A real list, at Word's own indentation, with the marker in its own element —
+never text — and positioned the way Word actually positions it: a fixed-width
+gutter with the marker flush left and a real gap before the paragraph text,
+not a browser counter-style marker crowded up against it. That distinction is
+verified, not assumed: see
+[LIST-PARSING.md § 6](docs/LIST-PARSING.md#6-rendering-the-marker).
 
 ## Install
 
@@ -136,7 +141,7 @@ download(new Blob([file], { type: 'text/html;charset=utf-8' }), suggestFileName(
 |---|---|
 | Paragraphs, headings | `<p>`, `<h1>`–`<h6>` from style name / class / element, never from font size |
 | Character formatting | run by run — bold, italic, underline styles, strike, colour, highlight, font, size, super/sub, spacing, small caps, language |
-| Bullets | native `@counter-style` from Word's `@list` rule; symbol fonts decoded to Unicode with the raw byte and font kept |
+| Bullets | positioned marker element at Word's own gutter width from Word's `@list` rule (a real `@counter-style` is available as an opt-in); symbol fonts decoded to Unicode with the raw byte and font kept |
 | Numbering | Word's own format and level text; `%1.%2` stays `1.1` |
 | Multilevel lists | arbitrary depth, per-level format, mixed number/bullet levels |
 | List identity | same / nested / continued / restarted, from `mso-list` and `lfo` |
@@ -191,7 +196,7 @@ standalone HTML, and exports whatever you pasted as a new fixture.
 ## Development
 
 ```bash
-npm test              # 221 tests
+npm test              # 225 tests
 npm run typecheck
 npm run lint
 npm run dev           # clipboard lab at :5180

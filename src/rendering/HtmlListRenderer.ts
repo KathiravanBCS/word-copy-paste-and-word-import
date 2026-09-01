@@ -115,7 +115,7 @@ export function compileLevelStyle(
   options: ListRenderOptions,
 ): ListLevelStyle {
   const prefix = options.classPrefix ?? 'wce';
-  const mode = options.markerMode ?? 'native';
+  const mode = options.markerMode ?? 'element';
   const definition = item.levelDefinition;
   const marker = item.marker;
 
